@@ -298,6 +298,11 @@ s32 objective_check(s32 index)
 								reqstatus = OBJECTIVE_INCOMPLETE;
 							}
 						}
+						
+						if (reqstatus == OBJECTIVE_COMPLETE && cmd[3] != 0) {
+							chr_set_stage_flag(NULL, cmd[3]);
+						}
+						
 					}
 					break;
 				case OBJECTIVETYPE_ENTERROOM:

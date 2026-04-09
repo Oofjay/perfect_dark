@@ -20056,7 +20056,7 @@ void alarm_tick(void)
 		// These sounds are alarm sounds.
 		// They go for a fraction of a second and are repeated by this function.
 		switch (g_Vars.stagenum) {
-		case STAGE_CHICAGO:      sound = SFXNUM_0455_ALARM_CHICAGO | 0x6000; break;
+		case STAGE_DEFECTION:    sound = SFXNUM_0455_ALARM_CHICAGO | 0x6000; break;
 		case STAGE_G5BUILDING:   sound = SFXNUM_00A2_ALARM_2; break;
 		case STAGE_AIRBASE:      sound = SFXNUM_00A1_ALARM_AIRBASE; break;
 		case STAGE_PELAGIC:      sound = SFXNUM_00A2_ALARM_2; break;

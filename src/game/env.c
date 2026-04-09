@@ -91,7 +91,7 @@ struct nofogenvironment g_NoFogEnvironments[] = {
 	{ STAGE_SKEDARRUINS,   15, 10000,   0,  0,  0, RGB(0x6565ff), SUNS(suns_skedar),  0, RGB(0xffffff),  5000, TEX_ENV_00, 0, RGB(0x000000),      0, TEX_ENV_00, 0, 1 },
 	{ STAGE_WAR,           15, 10000,   0,  0,  0, RGB(0x6565ff), SUNS(suns_skedar),  0, RGB(0xffffff),  5000, TEX_ENV_00, 0, RGB(0x000000),      0, TEX_ENV_00, 0, 1 },
 	{ STAGE_TEST_RUN,      15, 10000,   0,  0,  0, RGB(0x000000), NO_SUNS,            0, RGB(0x3a1100),  5000, TEX_ENV_00, 0, RGB(0x000000),      0, TEX_ENV_00, 0, 1 },
-	{ STAGE_MP_SKEDAR,     15, 10000,   0,  0,  0, RGB(0x000000), NO_SUNS,            1, RGB(0x3a1100),  5000, TEX_ENV_00, 0, RGB(0x000000),  -5000, TEX_ENV_00, 0, 1 },
+	{ STAGE_MP_SKEDAR,     10, 10000,   0,  0,  0, RGB(0x000000), NO_SUNS,            0, RGB(0x3a1100),  5000, TEX_ENV_00, 0, RGB(0x000000),      0, TEX_ENV_00, 0, 1 },
 	{ STAGE_TEST_SILO,     15, 10000,   0,  0,  0, RGB(0x000000), NO_SUNS,            1, RGB(0x3a1100),  5000, TEX_ENV_00, 0, RGB(0x000000),  -5000, TEX_ENV_00, 0, 1 },
 	{ STAGE_CHICAGO,       10, 10000,   0,  0,  0, RGB(0x000000), NO_SUNS,            1, RGB(0x50280a),  5000, TEX_ENV_00, 0, RGB(0x000000),  -5000, TEX_ENV_00, 0, 1 },
 	{ STAGE_G5BUILDING,    15, 10000,   0,  0,  0, RGB(0x000000), NO_SUNS,            0, RGB(0x50280a),  5000, TEX_ENV_00, 0, RGB(0x000000),  -5000, TEX_ENV_00, 0, 1 },

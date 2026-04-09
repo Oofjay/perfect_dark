@@ -1049,7 +1049,7 @@ Gfx *bg_render_scene(Gfx *gdl)
 				|| stagenum == g_Stages[STAGEINDEX_DEFECTION].id
 				|| stagenum == g_Stages[STAGEINDEX_EXTRACTION].id
 				|| stagenum == g_Stages[STAGEINDEX_MBR].id
-				|| stagenum == g_Stages[STAGEINDEX_TEST_OLD].id
+				|| stagenum == g_Stages[STAGEINDEX_MP_SKEDAR].id
 				|| stagenum == g_Stages[STAGEINDEX_ATTACKSHIP].id)) {
 		gdl = env_stop_fog(gdl);
 		gdl = vi0000ab78(gdl);
@@ -1066,7 +1066,7 @@ Gfx *bg_render_scene(Gfx *gdl)
 			roomnum = 0x02;
 		} else if (stagenum == g_Stages[STAGEINDEX_DEFECTION].id
 				|| stagenum == g_Stages[STAGEINDEX_EXTRACTION].id
-				|| stagenum == g_Stages[STAGEINDEX_MBR].id) {
+				|| stagenum == g_Stages[STAGEINDEX_MP_SKEDAR].id) {
 			roomnum = 0x01;
 		} else if (stagenum == g_Stages[STAGEINDEX_TEST_OLD].id) {
 			roomnum = 0x01;
@@ -1074,10 +1074,9 @@ Gfx *bg_render_scene(Gfx *gdl)
 			roomnum = 0x71;
 		}
 
-		if (PLAYERCOUNT() == 1
-				&& (stagenum == STAGE_DEFECTION
+		if ((stagenum == STAGE_DEFECTION
 					|| stagenum == STAGE_EXTRACTION
-					|| stagenum == STAGE_TEST_OLD
+					|| stagenum == STAGE_MP_SKEDAR
 					|| stagenum == STAGE_INFILTRATION
 					|| stagenum == STAGE_ESCAPE
 					|| stagenum == STAGE_ATTACKSHIP)) {
@@ -5750,7 +5749,7 @@ void bg_tick_portals(void)
 					if (bg_room_intersects_screen_box(room, &box)
 							&& ((g_StageIndex != STAGEINDEX_INFILTRATION && g_StageIndex != STAGEINDEX_RESCUE && g_StageIndex != STAGEINDEX_ESCAPE) || room != 0xf)
 							&& (g_StageIndex != STAGEINDEX_SKEDARRUINS || room != 0x02)
-							&& ((g_StageIndex != STAGEINDEX_DEFECTION && g_StageIndex != STAGEINDEX_EXTRACTION) || room != 0x01)
+							&& ((g_StageIndex != STAGEINDEX_DEFECTION && g_StageIndex != STAGEINDEX_EXTRACTION && g_StageIndex != STAGEINDEX_MP_SKEDAR) || room != 0x01)
 							&& (g_StageIndex != STAGEINDEX_ATTACKSHIP || room != 0x71)) {
 						bg_set_room_onscreen(room, 0, &box);
 					}

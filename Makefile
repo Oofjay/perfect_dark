@@ -213,10 +213,11 @@ ASSET_FILES := \
 	$(B_DIR)/assets/files/ob/ob_mid.seg.o
 
 LANG_JSON_FILES := $(shell find $(A_DIR) -path '*/lang/*.json')
+LANG_BIN_FILES := $(shell find $(E_DIR)/files/lang -name '*.bin')
 PADS_JSON_FILES := $(shell find $(A_DIR) -path '*/pads/*.json')
 TILES_JSON_FILES := $(shell find $(A_DIR) -path '*/tiles/*.json')
 
-LANG_O_FILES := \
+LANG_O_FILES_JSON := \
 	$(patsubst $(A_DIR)/lang/%.json, $(B_DIR)/assets/files/L%E.o, $(LANG_JSON_FILES)) \
 	$(patsubst $(A_DIR)/lang/%.json, $(B_DIR)/assets/files/L%J.o, $(LANG_JSON_FILES)) \
 	$(patsubst $(A_DIR)/lang/%.json, $(B_DIR)/assets/files/L%P.o, $(LANG_JSON_FILES)) \
@@ -224,6 +225,8 @@ LANG_O_FILES := \
 	$(patsubst $(A_DIR)/lang/%.json, $(B_DIR)/assets/files/L%_str_g.o, $(LANG_JSON_FILES)) \
 	$(patsubst $(A_DIR)/lang/%.json, $(B_DIR)/assets/files/L%_str_i.o, $(LANG_JSON_FILES)) \
 	$(patsubst $(A_DIR)/lang/%.json, $(B_DIR)/assets/files/L%_str_s.o, $(LANG_JSON_FILES))
+LANG_O_FILES_BIN := $(patsubst $(E_DIR)/files/lang/%.bin, $(B_DIR)/assets/files/L%.o, $(LANG_BIN_FILES))
+LANG_O_FILES := $(LANG_O_FILES_JSON) $(LANG_O_FILES_BIN)
 
 PADS_O_FILES := $(patsubst $(A_DIR)/pads/%.json, $(B_DIR)/assets/files/bgdata/bg_%_padsZ.o, $(PADS_JSON_FILES))
 TILES_O_FILES := $(patsubst $(A_DIR)/tiles/%.json, $(B_DIR)/assets/files/bgdata/bg_%_tilesZ.o, $(TILES_JSON_FILES))
@@ -614,34 +617,67 @@ $(B_DIR)/assets/animations.o: $(A_DIR)/animations.json
 	tools/assetmgr/mkanims
 
 # Lang
-$(B_DIR)/assets/files/L%E.o: $(A_DIR)/lang/%.json
-	tools/assetmgr/mklang $< en
+$(B_DIR)/assets/files/L%E: $(E_DIR)/files/lang/%E.bin
+	@mkdir -p $(B_DIR)/assets/files
+	tools/rarezip $< > $@
+	
+$(B_DIR)/assets/files/L%E.o: $(B_DIR)/assets/files/L%E
+	TOOLCHAIN=$(TOOLCHAIN) ROMID=$(ROMID) tools/mkrawobject $< $@
 
-$(B_DIR)/assets/files/L%J.o: $(A_DIR)/lang/%.json
-	tools/assetmgr/mklang $< jp
+$(B_DIR)/assets/files/L%J: $(E_DIR)/files/lang/%J.bin
+	@mkdir -p $(B_DIR)/assets/files
+	tools/rarezip $< > $@
+	
+$(B_DIR)/assets/files/L%J.o: $(B_DIR)/assets/files/L%J
+	TOOLCHAIN=$(TOOLCHAIN) ROMID=$(ROMID) tools/mkrawobject $< $@
 
-$(B_DIR)/assets/files/L%P.o: $(A_DIR)/lang/%.json
-	tools/assetmgr/mklang $< gb
+$(B_DIR)/assets/files/L%P: $(E_DIR)/files/lang/%P.bin
+	@mkdir -p $(B_DIR)/assets/files
+	tools/rarezip $< > $@
+	
+$(B_DIR)/assets/files/L%P.o: $(B_DIR)/assets/files/L%P
+	TOOLCHAIN=$(TOOLCHAIN) ROMID=$(ROMID) tools/mkrawobject $< $@
 
-$(B_DIR)/assets/files/L%_str_f.o: $(A_DIR)/lang/%.json
-	tools/assetmgr/mklang $< fr
+$(B_DIR)/assets/files/L%_str_f: $(E_DIR)/files/lang/%_str_f.bin
+	@mkdir -p $(B_DIR)/assets/files
+	tools/rarezip $< > $@
+	
+$(B_DIR)/assets/files/L%_str_f.o: $(B_DIR)/assets/files/L%_str_f
+	TOOLCHAIN=$(TOOLCHAIN) ROMID=$(ROMID) tools/mkrawobject $< $@
 
-$(B_DIR)/assets/files/L%_str_g.o: $(A_DIR)/lang/%.json
-	tools/assetmgr/mklang $< de
+$(B_DIR)/assets/files/L%_str_g: $(E_DIR)/files/lang/%_str_g.bin
+	@mkdir -p $(B_DIR)/assets/files
+	tools/rarezip $< > $@
+	
+$(B_DIR)/assets/files/L%_str_g.o: $(B_DIR)/assets/files/L%_str_g
+	TOOLCHAIN=$(TOOLCHAIN) ROMID=$(ROMID) tools/mkrawobject $< $@
 
-$(B_DIR)/assets/files/L%_str_i.o: $(A_DIR)/lang/%.json
-	tools/assetmgr/mklang $< it
+$(B_DIR)/assets/files/L%_str_i: $(E_DIR)/files/lang/%_str_i.bin
+	@mkdir -p $(B_DIR)/assets/files
+	tools/rarezip $< > $@
+	
+$(B_DIR)/assets/files/L%_str_i.o: $(B_DIR)/assets/files/L%_str_i
+	TOOLCHAIN=$(TOOLCHAIN) ROMID=$(ROMID) tools/mkrawobject $< $@
 
-$(B_DIR)/assets/files/L%_str_s.o: $(A_DIR)/lang/%.json
-	tools/assetmgr/mklang $< es
+$(B_DIR)/assets/files/L%_str_s: $(E_DIR)/files/lang/%_str_s.bin
+	@mkdir -p $(B_DIR)/assets/files
+	tools/rarezip $< > $@
+	
+$(B_DIR)/assets/files/L%_str_s.o: $(B_DIR)/assets/files/L%_str_s
+	TOOLCHAIN=$(TOOLCHAIN) ROMID=$(ROMID) tools/mkrawobject $< $@
 
 # Pads
-$(B_DIR)/assets/files/bgdata/bg_%_padsZ.o: $(A_DIR)/pads/%.json
-	tools/assetmgr/mkpads $<
+$(B_DIR)/assets/files/bgdata/bg_%_padsZ: $(A_DIR)/files/bgdata/bg_%_pads.bin
+	@mkdir -p $(B_DIR)/assets/files/bgdata
+	tools/rarezip $< > $@
+
+# Pads
+#$(B_DIR)/assets/files/bgdata/bg_%_padsZ.o: $(A_DIR)/pads/%.json
+#	tools/assetmgr/mkpads $<
 
 # Pads - but this is the zipped non-obj, for make test
-$(B_DIR)/assets/files/bgdata/bg_%_padsZ: $(A_DIR)/pads/%.json
-	tools/assetmgr/mkpads $<
+#$(B_DIR)/assets/files/bgdata/bg_%_padsZ: $(A_DIR)/pads/%.json
+#	tools/assetmgr/mkpads $<
 
 # Sequences
 $(B_DIR)/assets/sequences.o: $(A_DIR)/sequences.json
@@ -652,12 +688,17 @@ $(B_DIR)/assets/textureslist.o: $(A_DIR)/textures.json
 	tools/assetmgr/mktextures
 
 # Tiles
-$(B_DIR)/assets/files/bgdata/bg_%_tilesZ.o: $(A_DIR)/tiles/%.json
-	tools/assetmgr/mktiles $<
+$(B_DIR)/assets/files/bgdata/bg_%_tilesZ: $(E_DIR)/files/bgdata/bg_%_tiles.bin
+	@mkdir -p $(B_DIR)/assets/files/bgdata
+	tools/rarezip $< > $@
+
+# Tiles
+#$(B_DIR)/assets/files/bgdata/bg_%_tilesZ.o: $(A_DIR)/tiles/%.json
+#	tools/assetmgr/mktiles $<
 
 # Tiles - but this is the zipped non-obj, for make test
-$(B_DIR)/assets/files/bgdata/bg_%_tilesZ: $(A_DIR)/tiles/%.json
-	tools/assetmgr/mktiles $<
+#$(B_DIR)/assets/files/bgdata/bg_%_tilesZ: $(A_DIR)/tiles/%.json
+#	tools/assetmgr/mktiles $<
 
 ################################################################################
 # Files
@@ -712,7 +753,7 @@ $(B_DIR)/files/setup/%.bin: $(B_DIR)/assets/files/setup/%.elf
 	@mkdir -p $(dir $@)
 	$(TOOLCHAIN)-objcopy $< $@ -O binary
 
-$(B_DIR)/assets/files/U%Z: $(B_DIR)/files/setup/%.bin
+$(B_DIR)/assets/files/U%Z: $(E_DIR)/files/setup/%.bin
 	tools/rarezip $< > $@
 
 # General target to convert any finalised file into a raw object for ld

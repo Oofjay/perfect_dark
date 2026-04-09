@@ -120,7 +120,7 @@ void stars_reset(void)
 		if (g_Vars.stagenum == STAGE_TEST_OLD) {
 			g_StarsBelowHorizon = true;
 			g_StarCount = 1600;
-		} else if (g_Vars.stagenum == STAGE_DEFECTION || g_Vars.stagenum == STAGE_EXTRACTION) {
+		} else if (g_Vars.stagenum == STAGE_DEFECTION || g_Vars.stagenum == STAGE_EXTRACTION || g_Vars.stagenum == STAGE_MP_SKEDAR) {
 			g_StarCount = 200;
 			g_StarGridSize = 2;
 		} else if (g_Vars.stagenum == STAGE_ATTACKSHIP) {

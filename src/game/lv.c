@@ -390,7 +390,7 @@ void lv_reset(s32 stagenum)
 	case STAGE_INFILTRATION:
 	case STAGE_DEFECTION:
 	case STAGE_ATTACKSHIP:
-	case STAGE_TEST_OLD:
+	case STAGE_MP_SKEDAR:
 		stars_reset();
 		break;
 	}

@@ -375,18 +375,9 @@ void room_init_lights(s32 roomnum)
 		room->br_base += (room->br_light_max - room->br_light_min) * 4 / 5;
 	}
 
-	switch (g_Vars.stagenum) {
-	case STAGE_EXTRACTION:
-	case STAGE_DEFECTION:
-		if (roomnum == 0x003d) { // near the top comms hub
-			room->br_base = 2;
-		}
-		break;
-	}
-
 	if (((g_StageIndex == STAGEINDEX_INFILTRATION || g_StageIndex == STAGEINDEX_RESCUE || g_StageIndex == STAGEINDEX_ESCAPE || g_StageIndex == STAGEINDEX_MAIANSOS)
 				&& roomnum == 0x000f) // freight elevator shaft
-			|| ((g_StageIndex == STAGEINDEX_DEFECTION || g_StageIndex == STAGEINDEX_EXTRACTION || g_StageIndex == STAGEINDEX_MBR)
+			|| ((g_StageIndex == STAGEINDEX_DEFECTION || g_StageIndex == STAGEINDEX_EXTRACTION || g_StageIndex == STAGEINDEX_MP_SKEDAR)
 				&& roomnum == 0x0001) // moon
 			|| ((g_StageIndex == STAGEINDEX_SKEDARRUINS || g_StageIndex == STAGEINDEX_WAR)
 				&& roomnum == 0x0002) // fake sky
@@ -433,12 +424,6 @@ void room_init_lights(s32 roomnum)
 			case STAGE_CITRAINING:
 			case STAGE_DEFENSE:
 				if (roomnum == ROOM_DISH_FIRINGRANGE) {
-					light->vulnerable = false;
-				}
-				break;
-			case STAGE_DEFECTION:
-			case STAGE_EXTRACTION:
-				if (roomnum == 0x003e && (i == 0 || i == 1)) { // top comms hub
 					light->vulnerable = false;
 				}
 				break;
@@ -657,11 +642,6 @@ void lights_reset_2(void)
 			g_PortalsOpenTmp[i] = true;
 			if (1);
 		}
-	}
-
-	if (g_Vars.stagenum == STAGE_EXTRACTION || g_Vars.stagenum == STAGE_DEFECTION) {
-		g_PortalsOpenTmp[98] = false;
-		g_PortalsOpenTmp[100] = false;
 	}
 
 	osSyncPrintf("L2(%d) -> ", __LINE__);

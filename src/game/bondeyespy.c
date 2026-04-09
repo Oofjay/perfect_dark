@@ -574,7 +574,7 @@ bool eyespy_try_launch(void)
 	g_Vars.currentplayer->eyespy->up.z = 0;
 	g_Vars.currentplayer->eyespy->startuptimer60 = 0;
 
-	if (stage_get_index(g_Vars.stagenum) == STAGEINDEX_G5BUILDING
+	if (stage_get_index(g_Vars.stagenum) == STAGEINDEX_INVESTIGATION
 			|| stage_get_index(g_Vars.stagenum) == STAGEINDEX_CITRAINING) {
 		g_EyespyMinHeight = 30;
 	} else {

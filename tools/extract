@@ -451,7 +451,7 @@ class Extractor:
         'jpnfontsingle':   [0x148c40,  0x194b20,  0x194b20,  0x180330,  0x180330,  0,         ],
         'jpnfontmulti':    [0x154340,  0x19fb40,  0x19fb40,  0x18b340,  0x18b340,  0,         ],
         'jpnfontcombined': [0,         0,         0,         0,         0,         0x179330,  ],
-        'animations':      [0x155dc0,  0x1a15c0,  0x1a15c0,  0x18cdc0,  0x18cdc0,  0x190c50,  ],
+        'animations':      [0x155dc0,  0x1a15c0,  0x157810,  0x18cdc0,  0x18cdc0,  0x190c50,  ],
         'mpconfigs':       [0x785130,  0x7d0a40,  0x7d0a40,  0x7bc240,  0x7bc240,  0x7c00d0,  ],
         'firingrange':     [0x79e410,  0x7e9d20,  0x7e9d20,  0x7d5520,  0x7d5520,  0x7d93b0,  ],
         'textureconfig':   [0x79f960,  0x7eb270,  0x7eb270,  0x7d6a70,  0x7d6a70,  0x7da900,  ],
