@@ -297,12 +297,7 @@ s32 objective_check(s32 index)
 							} else {
 								reqstatus = OBJECTIVE_INCOMPLETE;
 							}
-						}
-						
-						if (reqstatus == OBJECTIVE_COMPLETE && cmd[3] != 0) {
-							chr_set_stage_flag(NULL, cmd[3]);
-						}
-						
+						}					
 					}
 					break;
 				case OBJECTIVETYPE_ENTERROOM:
@@ -525,7 +520,8 @@ void objective_check_holograph(f32 maxdist)
 							&& sp70[1] > cam_get_screen_top()
 							&& sp70[1] < cam_get_screen_top() + cam_get_screen_height()) {
 						criteria->status = OBJECTIVE_COMPLETE;
-
+						hudmsg_create(lang_get(L_OPTIONS_494), HUDMSGTYPE_DEFAULT);
+						
 						if (g_Vars.stagenum == STAGE_CITRAINING) {
 							struct trainingdata *data = dt_get_data();
 							data->holographedpc = true;
