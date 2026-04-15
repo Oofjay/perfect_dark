@@ -381,7 +381,7 @@ Gfx *ctc_radar_extra(Gfx *gdl)
 					g_ScenarioData.ctc.tokens[i]->type != PROPTYPE_PLAYER) {
 				struct coord dist;
 				dist.x = g_ScenarioData.ctc.tokens[i]->pos.x - g_Vars.currentplayer->prop->pos.x;
-				dist.y = g_ScenarioData.ctc.tokens[i]->pos.y - g_Vars.currentplayer->prop->pos.y;
+				dist.y = (g_ScenarioData.ctc.tokens[i]->pos.y + 50) - g_Vars.currentplayer->prop->pos.y;
 				dist.z = g_ScenarioData.ctc.tokens[i]->pos.z - g_Vars.currentplayer->prop->pos.z;
 				gdl = radar_draw_dot(gdl, g_ScenarioData.ctc.tokens[i], &dist, g_TeamColours[i], 0, 1);
 			}
@@ -402,7 +402,7 @@ bool ctc_radar_chr(Gfx **gdl, struct prop *prop)
 				struct coord dist;
 				s32 colour = g_TeamColours[radar_get_team_index(prop->chr->team)];
 				dist.x = g_ScenarioData.ctc.tokens[i]->pos.x - g_Vars.currentplayer->prop->pos.x;
-				dist.y = g_ScenarioData.ctc.tokens[i]->pos.y - g_Vars.currentplayer->prop->pos.y;
+				dist.y = (g_ScenarioData.ctc.tokens[i]->pos.y + 50) - g_Vars.currentplayer->prop->pos.y;
 				dist.z = g_ScenarioData.ctc.tokens[i]->pos.z - g_Vars.currentplayer->prop->pos.z;
 				*gdl = radar_draw_dot(*gdl, g_ScenarioData.ctc.tokens[i], &dist,
 						g_TeamColours[i], colour, 1);

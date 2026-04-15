@@ -474,7 +474,7 @@ Gfx *htb_radar_extra(Gfx *gdl)
 			g_ScenarioData.htb.token->type != PROPTYPE_CHR) {
 		struct coord dist;
 		dist.x = g_ScenarioData.htb.pos.x - g_Vars.currentplayer->prop->pos.x;
-		dist.y = g_ScenarioData.htb.pos.y - g_Vars.currentplayer->prop->pos.y;
+		dist.y = (g_ScenarioData.htb.pos.y + 50) - g_Vars.currentplayer->prop->pos.y;
 		dist.z = g_ScenarioData.htb.pos.z - g_Vars.currentplayer->prop->pos.z;
 		gdl = radar_draw_dot(gdl, g_ScenarioData.htb.token, &dist, 0x00ff0000, 0, 1);
 	}
@@ -490,7 +490,7 @@ bool htb_radar_chr(Gfx **gdl, struct prop *prop)
 		if (prop->type == PROPTYPE_PLAYER || prop->type == PROPTYPE_CHR) {
 			struct coord dist;
 			dist.x = prop->pos.x - g_Vars.currentplayer->prop->pos.x;
-			dist.y = prop->pos.y - g_Vars.currentplayer->prop->pos.y;
+			dist.y = (prop->pos.y + 50) - g_Vars.currentplayer->prop->pos.y;
 			dist.z = prop->pos.z - g_Vars.currentplayer->prop->pos.z;
 
 			if (g_MpSetup.options & MPOPTION_TEAMSENABLED) {

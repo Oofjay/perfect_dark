@@ -7,6 +7,7 @@
 #include "game/tex.h"
 #include "game/game_152fa0.h"
 #include "game/text.h"
+#include "game/hudmsg.h"
 #include "game/mplayer/scenarios.h"
 #include "game/radar.h"
 #include "game/options.h"
@@ -158,7 +159,7 @@ Gfx *radar_draw_dot(Gfx *gdl, struct prop *prop, struct coord *dist, u32 colour1
 			gDPFillRectangleScaled(gdl++, x - 2, y + 0, x + 1, y + 1);
 			gDPFillRectangleScaled(gdl++, x - 1, y - 1, x + 0, y + 0);
 			gdl = text_end_boxmode(gdl);
-		} else if (g_RadarYIndicatorsEnabled && dist->y > 250) {
+		} else if (g_RadarYIndicatorsEnabled && dist->y > 200) {
 			// Up triangle
 			gdl = text_begin_boxmode(gdl, (0xff >> shiftamount) + colour1);
 			gDPFillRectangleScaled(gdl++, x - 3, y - 1, x + 2, y + 2);
@@ -169,7 +170,7 @@ Gfx *radar_draw_dot(Gfx *gdl, struct prop *prop, struct coord *dist, u32 colour1
 			gDPFillRectangleScaled(gdl++, x - 2, y + 0, x + 1, y + 1);
 			gDPFillRectangleScaled(gdl++, x - 1, y - 1, x + 0, y + 0);
 			gdl = text_end_boxmode(gdl);
-		} else if (g_RadarYIndicatorsEnabled && dist->y < -250) {
+		} else if (g_RadarYIndicatorsEnabled && dist->y < -200) {
 			// Down triangle
 			gdl = text_begin_boxmode(gdl, (0xff >> shiftamount) + colour1);
 			gDPFillRectangleScaled(gdl++, x - 3, y - 2, x + 2, y + 1);
@@ -204,7 +205,7 @@ Gfx *radar_draw_dot(Gfx *gdl, struct prop *prop, struct coord *dist, u32 colour1
 			gDPFillRectangleScaled(gdl++, x - 2, y + 0, x + 1, y + 1);
 			gDPFillRectangleScaled(gdl++, x - 1, y - 1, x + 0, y + 0);
 			gdl = text_end_boxmode(gdl);
-		} else if (g_RadarYIndicatorsEnabled && dist->y > 250) {
+		} else if (g_RadarYIndicatorsEnabled && dist->y > 200) {
 			// Up triangle
 			gdl = text_begin_boxmode(gdl, (0xff >> shiftamount) + colour2);
 			gDPFillRectangleScaled(gdl++, x - 3, y - 1, x + 2, y + 2);
@@ -215,7 +216,7 @@ Gfx *radar_draw_dot(Gfx *gdl, struct prop *prop, struct coord *dist, u32 colour1
 			gDPFillRectangleScaled(gdl++, x - 2, y + 0, x + 1, y + 1);
 			gDPFillRectangleScaled(gdl++, x - 1, y - 1, x + 0, y + 0);
 			gdl = text_end_boxmode(gdl);
-		} else if (g_RadarYIndicatorsEnabled && dist->y < -250) {
+		} else if (g_RadarYIndicatorsEnabled && dist->y < -200) {
 			// Down triangle
 			gdl = text_begin_boxmode(gdl, (0xff >> shiftamount) + colour2);
 			gDPFillRectangleScaled(gdl++, x - 3, y - 2, x + 2, y + 1);
@@ -251,6 +252,7 @@ Gfx *radar_render(Gfx *gdl)
 	struct coord pos;
 	u32 colour;
 	s32 i;
+	char text[48];
 
 	tconfig = &g_TexRadarConfigs[TEX_RADAR_BG];
 	playernum = g_Vars.currentplayernum;
@@ -345,7 +347,7 @@ Gfx *radar_render(Gfx *gdl)
 				} else {
 					colour = 0x00ff0000;
 				}
-
+				
 				gdl = radar_draw_dot(gdl, g_Vars.players[i]->prop, &pos, colour, 0, 0);
 			}
 		}
@@ -387,6 +389,9 @@ Gfx *radar_render(Gfx *gdl)
 				}
 
 				gdl = radar_draw_dot(gdl, g_MpBotChrPtrs[i]->prop, &pos, colour, 0, 0);
+				
+				sprintf(text, "%d", (s32)g_Vars.currentplayer->prop->pos.y);
+				hudmsg_create(text, HUDMSGTYPE_DEFAULT);
 			}
 		}
 	}

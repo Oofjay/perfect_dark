@@ -635,7 +635,7 @@ Gfx *koh_radar_extra(Gfx *gdl)
 		struct coord dist;
 		u32 colour;
 		dist.x = g_ScenarioData.koh.hillpos.x - g_Vars.currentplayer->prop->pos.x;
-		dist.y = g_ScenarioData.koh.hillpos.y - g_Vars.currentplayer->prop->pos.y;
+		dist.y = (g_ScenarioData.koh.hillpos.y + 50) - g_Vars.currentplayer->prop->pos.y;
 		dist.z = g_ScenarioData.koh.hillpos.z - g_Vars.currentplayer->prop->pos.z;
 
 		if (g_ScenarioData.koh.occupiedteam == -1) {

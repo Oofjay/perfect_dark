@@ -672,7 +672,7 @@ Gfx *htm_radar_extra(Gfx *gdl)
 		// Show the uplink
 		if (data->uplink && data->uplink->type != PROPTYPE_PLAYER && data->uplink->type != PROPTYPE_CHR) {
 			dist.x = data->uplink->pos.x - g_Vars.currentplayer->prop->pos.x;
-			dist.y = data->uplink->pos.y - g_Vars.currentplayer->prop->pos.y;
+			dist.y = (data->uplink->pos.y + 50) - g_Vars.currentplayer->prop->pos.y;
 			dist.z = data->uplink->pos.z - g_Vars.currentplayer->prop->pos.z;
 
 			gdl = radar_draw_dot(gdl, data->uplink, &dist, 0x00ff0000, 0x00000000, true);
@@ -741,7 +741,7 @@ bool htm_radar_chr(Gfx **gdl, struct prop *prop)
 				(prop->type == PROPTYPE_PLAYER || prop->type == PROPTYPE_CHR)) {
 			struct coord dist;
 			dist.x = prop->pos.x - g_Vars.currentplayer->prop->pos.x;
-			dist.y = prop->pos.y - g_Vars.currentplayer->prop->pos.y;
+			dist.y = (prop->pos.y + 50) - g_Vars.currentplayer->prop->pos.y;
 			dist.z = prop->pos.z - g_Vars.currentplayer->prop->pos.z;
 
 			if (g_MpSetup.options & MPOPTION_TEAMSENABLED) {
