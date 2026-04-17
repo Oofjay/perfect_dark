@@ -983,7 +983,7 @@ Gfx *lvPrintRateGraph(Gfx *gdl)
 	gdl = func0f153134(gdl);
 
 	// graph data
-	gdl = textSetPrimColour(gdl, 0x00ff00a0);
+	gdl = text_begin_boxmode(gdl, 0x00ff00a0);
 
 	for (i = 0; i < 60; i++) {
 		s32 index = (g_LvRateIndex + i) % 60;
@@ -994,10 +994,10 @@ Gfx *lvPrintRateGraph(Gfx *gdl)
 		gDPFillRectangleScaled(gdl++, x, y, x + 2, bottom);
 	}
 
-	gdl = text0f153838(gdl);
+	gdl = text_end_boxmode(gdl);
 
 	// grid lines
-	gdl = textSetPrimColour(gdl, 0x000000a0);
+	gdl = text_begin_boxmode(gdl, 0x000000a0);
 
 	gDPFillRectangleScaled(gdl++, 10, 10, 130, 11);
 	gDPFillRectangleScaled(gdl++, 10, 20, 130, 21);
@@ -1008,16 +1008,16 @@ Gfx *lvPrintRateGraph(Gfx *gdl)
 	gDPFillRectangleScaled(gdl++, 10, 70, 130, 71);
 
 	// labels
-	gdl = func0f0d479c(gdl);
+	gdl = ortho_begin(gdl);
 
 	if (g_FontHandelGothicXs) {
 		x = 120 + 15;
 		y = 7;
-		gdl = textRender(gdl, &x, &y, "60", g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);
+		gdl = text_render_vx(gdl, &x, &y, "60", g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, vi_get_width(), vi_get_height(), 0, 0);
 
 		x = 120 + 15;
 		y = 37;
-		gdl = textRender(gdl, &x, &y, "30", g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);
+		gdl = text_render_vx(gdl, &x, &y, "30", g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, vi_get_width(), vi_get_height(), 0, 0);
 	}
 
 	return gdl;
@@ -1053,24 +1053,24 @@ Gfx *lvPrintRateText(Gfx *gdl)
 		if (count) {
 			x = 10;
 			sprintf(buffer, "min %d", min);
-			gdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);
+			gdl = text_render_vx(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, vi_get_width(), vi_get_height(), 0, 0);
 
 			x = 50;
 			sprintf(buffer, "max %d", max);
-			gdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);
+			gdl = text_render_vx(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, vi_get_width(), vi_get_height(), 0, 0);
 
 			x = 90;
 			sprintf(buffer, "avg %d", sum / count);
-			gdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);
+			gdl = text_render_vx(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, vi_get_width(), vi_get_height(), 0, 0);
 
 			x = 130;
 			sprintf(buffer, "cur %d\n\n", (s32) (OS_CPU_COUNTER / g_Vars.diffframet));
-			gdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);
+			gdl = text_render_vx(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, vi_get_width(), vi_get_height(), 0, 0);
 		}
 
 		x = 10;
 		sprintf(buffer, "Antialias %s\n", g_LvAntialias ? "on" : "off");
-		gdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);
+		gdl = text_render_vx(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, vi_get_width(), vi_get_height(), 0, 0);
 	}
 
 	return gdl;
@@ -1078,26 +1078,26 @@ Gfx *lvPrintRateText(Gfx *gdl)
 
 Gfx *lvPrint(Gfx *gdl)
 {
-	if (joyGetButtonsPressedThisFrame(0, L_TRIG)) {
+	if (joy_get_buttons_pressed_this_frame(0, L_TRIG)) {
 		g_LvShowRates = 1 - g_LvShowRates;
 	}
 
-	if (joyGetButtonsPressedThisFrame(0, U_JPAD)) {
+	if (joy_get_buttons_pressed_this_frame(0, U_JPAD)) {
 		g_LvAntialias = 1 - g_LvAntialias;
-		viUpdateMode();
+		vi_update_mode();
 	}
 
 	lvRecordRate();
 
 	if (g_LvShowRates) {
-		g_ScaleX = g_ViRes == VIRES_HI ? 2 : 1;
+		g_UiScaleX = g_ViRes == VIRES_HI ? 2 : 1;
 
-		gdl = text0f153628(gdl);
+		gdl = text_begin(gdl);
 		gdl = lvPrintRateGraph(gdl);
 		gdl = lvPrintRateText(gdl);
-		gdl = text0f153780(gdl);
+		gdl = text_end(gdl);
 
-		g_ScaleX = 1;
+		g_UiScaleX = 1;
 	}
 
 	return gdl;

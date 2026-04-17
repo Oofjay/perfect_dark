@@ -3496,7 +3496,7 @@ void player_tick(bool arg0)
 								explode = true;
 							}
 
-							if (joyGetButtons(contpad1, B_BUTTON | Z_TRIG | 0 | R_TRIG)) {
+							if (joy_get_buttons(contpad1, B_BUTTON | Z_TRIG | 0 | R_TRIG)) {
 								slow = true;
 							}
 						} else {
@@ -3504,7 +3504,7 @@ void player_tick(bool arg0)
 								explode = true;
 							}
 
-							if (joyGetButtons(contpad1, A_BUTTON | B_BUTTON | 0 | R_TRIG)) {
+							if (joy_get_buttons(contpad1, A_BUTTON | B_BUTTON | 0 | R_TRIG)) {
 								slow = true;
 							}
 						}
@@ -4068,7 +4068,7 @@ void player_tick(bool arg0)
 
 		if (!lv_is_paused()
 				&& arg0
-				&& joyGetButtonsPressedThisFrame(contpad1, A_BUTTON | B_BUTTON | Z_TRIG | START_BUTTON | 0 | R_TRIG)) {
+				&& joy_get_buttons_pressed_this_frame(contpad1, A_BUTTON | B_BUTTON | Z_TRIG | START_BUTTON | 0 | R_TRIG)) {
 			var8007074c = 2;
 
 			if (player_is_fade_complete()) {

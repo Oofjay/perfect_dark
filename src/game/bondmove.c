@@ -1132,8 +1132,8 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 						// Handle side stepping
 						if (g_Vars.currentplayer->insightaimmode == false) {
 							if (allowc1buttons) {
-								movedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));
-								movedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));
+								movedata.digitalstepleft = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));
+								movedata.digitalstepright = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));
 							}
 						} else {
 							// This doesn't appear to be r-leaning.
@@ -1174,8 +1174,8 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 						}
 
 						if (!g_Vars.currentplayer->insightaimmode && allowc1buttons) {
-							movedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));
-							movedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));
+							movedata.digitalstepleft = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));
+							movedata.digitalstepright = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));
 						}
 
 						movedata.digitalstepforward = false;
@@ -1341,7 +1341,7 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 					if (allowc1buttons) {
 						for (i = 0; i < numsamples; i++) {
 							if (!canmanualzoom && aimonhist[i]) {
-								if (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (0 | U_CBUTTONS))) {
+								if (joy_get_buttons_pressed_on_sample(i, contpad1, c1allowedbuttons & (0 | U_CBUTTONS))) {
 									if (movedata.crouchdown) {
 										movedata.crouchdown--;
 									} else {
@@ -1351,7 +1351,7 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 									g_Vars.currentplayer->aimtaptime = -1;
 								}
 
-								if (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (0 | D_CBUTTONS))) {
+								if (joy_get_buttons_pressed_on_sample(i, contpad1, c1allowedbuttons & (0 | D_CBUTTONS))) {
 									if (movedata.crouchup) {
 										movedata.crouchup--;
 									} else {
@@ -1391,10 +1391,10 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 							&& g_Vars.coopplayernum <= -1) {
 						movedata.eyesshut = g_Vars.currentplayer->insightaimmode
 							&& !canmanualzoom
-							&& joyGetButtons(contpad1, c1allowedbuttons & (0 | D_CBUTTONS));
+							&& joy_get_buttons(contpad1, c1allowedbuttons & (0 | D_CBUTTONS));
 					}
 
-					if (bgunGetWeaponNum(HAND_RIGHT) == WEAPON_FARSIGHT) {
+					if (bgun_get_weapon_num(HAND_RIGHT) == WEAPON_FARSIGHT) {
 						movedata.farsighttempautoseek = g_Vars.currentplayer->insightaimmode && (c1buttons & (L_CBUTTONS | R_CBUTTONS | 0 | 0));
 					} else {
 						movedata.rleanleft = g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | L_CBUTTONS));

@@ -2135,8 +2135,8 @@ Gfx *menu_render_model(Gfx *gdl, struct menumodel *menumodel, s32 modeltype)
 
 			model_get_root_position(&menumodel->bodymodel, &oldpos);
 
-			if (joyGetButtons(0, 0)) {
-				modelSetRootPosition(&menumodel->bodymodel, &newpos);
+			if (joy_get_buttons(0, 0)) {
+				model_set_root_position(&menumodel->bodymodel, &newpos);
 			}
 		}
 #endif

@@ -251,7 +251,7 @@ void vi_black(bool black)
 
 extern u8 g_LvAntialias;
 
-void viHandleRetrace(void)
+void vi_handle_retrace(void)
 {
 	s32 prevmask;
 	s32 offset;

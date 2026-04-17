@@ -205,13 +205,13 @@ void bbike_apply_move_data(struct movedata *data)
 	f32 value1;
 	f32 tmp;
 
-	if ((optionsGetControlMode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_12
-				|| optionsGetControlMode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_14
-				|| optionsGetControlMode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_13
-				|| optionsGetControlMode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_11)
-			&& !lvIsPaused()) {
-		data->digitalstepleft = joyCountButtonsOnSpecificSamples(0, contnum, 0 | L_CBUTTONS);
-		data->digitalstepright = joyCountButtonsOnSpecificSamples(0, contnum, 0 | R_CBUTTONS);
+	if ((options_get_control_mode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_12
+				|| options_get_control_mode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_14
+				|| options_get_control_mode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_13
+				|| options_get_control_mode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_11)
+			&& !lv_is_paused()) {
+		data->digitalstepleft = joy_count_buttons_on_specific_samples(0, contnum, 0 | L_CBUTTONS);
+		data->digitalstepright = joy_count_buttons_on_specific_samples(0, contnum, 0 | R_CBUTTONS);
 	}
 
 	// Forward/back
