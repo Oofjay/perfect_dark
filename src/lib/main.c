@@ -75,7 +75,7 @@
 void rng_set_seed(u32 seed);
 
 bool var8005d9b0 = false;
-s32 g_StageNum = STAGE_TITLE;
+s32 g_StageNum = STAGE_CITRAINING;
 u32 g_MainMemaHeapSize = 1024 * 300;
 bool var8005d9bc = false;
 s32 var8005d9c0 = 0;
