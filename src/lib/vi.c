@@ -249,11 +249,14 @@ void vi_black(bool black)
 	g_ViUnblackTimer = black;
 }
 
-void vi_handle_retrace(void)
+extern u8 g_LvAntialias;
+
+void viHandleRetrace(void)
 {
 	s32 prevmask;
 	s32 offset;
 	s32 reg;
+	u32 features;
 
 	if (g_ViShakeTimer != 0) {
 		g_ViShakeTimer--;
@@ -284,7 +287,16 @@ void vi_handle_retrace(void)
 	osViBlack(g_ViUnblackTimer);
 	osViSetXScale(g_ViXScalesBySlot[1 - var8005ce74]);
 	osViSetYScale(g_ViYScalesBySlot[1 - var8005ce74]);
-	osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_DITHER_FILTER_ON);
+
+	features = OS_VI_GAMMA_OFF;
+
+	if (g_LvAntialias) {
+		features |= OS_VI_DITHER_FILTER_ON;
+	} else {
+		features |= OS_VI_DITHER_FILTER_OFF;
+	}
+
+	osViSetSpecialFeatures(features);
 }
 
 void vi_update_mode(void)

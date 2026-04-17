@@ -1,0 +1,866 @@
+[1mdiff --git a/Makefile b/Makefile[m
+[1mindex d459b9054..85903c955 100644[m
+[1m--- a/Makefile[m
+[1m+++ b/Makefile[m
+[36m@@ -22,7 +22,7 @@[m [mROMID ?= ntsc-final[m
+ #[m
+ # If enabled, all further options are ignored and are set automatically.[m
+ [m
+[31m-MATCHING = 1[m
+[32m+[m[32mMATCHING = 0[m
+ [m
+ # COMPILER - Choose which compiler to use.[m
+ #[m
+[1mdiff --git a/src/game/activemenutick.c b/src/game/activemenutick.c[m
+[1mindex de1a0cd6e..ebecfd397 100644[m
+[1m--- a/src/game/activemenutick.c[m
+[1m+++ b/src/game/activemenutick.c[m
+[36m@@ -72,7 +72,7 @@[m [mvoid amTick(void)[m
+ [m
+ 				// JPN fixes the bug that's documented in amChangeScreen[m
+ 				if (controlmode == CONTROLMODE_13 || controlmode == CONTROLMODE_14) {[m
+[31m-					if ((buttonsstate & R_TRIG) || (buttonsstate & L_TRIG)) {[m
+[32m+[m					[32mif ((buttonsstate & R_TRIG) || (buttonsstate & 0)) {[m
+ 						stayopen = true;[m
+ 					}[m
+ [m
+[36m@@ -90,7 +90,7 @@[m [mvoid amTick(void)[m
+ 						stayopen = true;[m
+ 					}[m
+ [m
+[31m-					if ((buttonsstate & R_TRIG) || (buttonsstate & L_TRIG)) {[m
+[32m+[m					[32mif ((buttonsstate & R_TRIG) || (buttonsstate & 0)) {[m
+ #if VERSION >= VERSION_JPN_FINAL[m
+ 						if (g_Vars.currentplayer->numaibuddies > 0) {[m
+ 							g_AmMenus[g_AmIndex].allbots = true;[m
+[36m@@ -134,19 +134,19 @@[m [mvoid amTick(void)[m
+ 					column = 2;[m
+ 				}[m
+ [m
+[31m-				if (buttonsstate & U_JPAD) {[m
+[32m+[m				[32mif (buttonsstate & 0) {[m
+ 					row = 0;[m
+ 				}[m
+ [m
+[31m-				if (buttonsstate & D_JPAD) {[m
+[32m+[m				[32mif (buttonsstate & 0) {[m
+ 					row = 2;[m
+ 				}[m
+ [m
+[31m-				if (buttonsstate & L_JPAD) {[m
+[32m+[m				[32mif (buttonsstate & 0) {[m
+ 					column = 0;[m
+ 				}[m
+ [m
+[31m-				if (buttonsstate & R_JPAD) {[m
+[32m+[m				[32mif (buttonsstate & 0) {[m
+ 					column = 2;[m
+ 				}[m
+ [m
+[36m@@ -191,19 +191,19 @@[m [mvoid amTick(void)[m
+ 						column = 2;[m
+ 					}[m
+ [m
+[31m-					if (buttonsstate2 & U_JPAD) {[m
+[32m+[m					[32mif (buttonsstate2 & 0) {[m
+ 						row = 0;[m
+ 					}[m
+ [m
+[31m-					if (buttonsstate2 & D_JPAD) {[m
+[32m+[m					[32mif (buttonsstate2 & 0) {[m
+ 						row = 2;[m
+ 					}[m
+ [m
+[31m-					if (buttonsstate2 & L_JPAD) {[m
+[32m+[m					[32mif (buttonsstate2 & 0) {[m
+ 						column = 0;[m
+ 					}[m
+ [m
+[31m-					if (buttonsstate2 & R_JPAD) {[m
+[32m+[m					[32mif (buttonsstate2 & 0) {[m
+ 						column = 2;[m
+ 					}[m
+ [m
+[1mdiff --git a/src/game/bondbike.c b/src/game/bondbike.c[m
+[1mindex 7c83d4f5d..04e60db22 100644[m
+[1m--- a/src/game/bondbike.c[m
+[1m+++ b/src/game/bondbike.c[m
+[36m@@ -208,8 +208,8 @@[m [mvoid bbikeApplyMoveData(struct movedata *data)[m
+ 				|| optionsGetControlMode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_13[m
+ 				|| optionsGetControlMode(g_Vars.currentplayerstats->mpindex) == CONTROLMODE_11)[m
+ 			&& !lvIsPaused()) {[m
+[31m-		data->digitalstepleft = joyCountButtonsOnSpecificSamples(0, contnum, L_JPAD | L_CBUTTONS);[m
+[31m-		data->digitalstepright = joyCountButtonsOnSpecificSamples(0, contnum, R_JPAD | R_CBUTTONS);[m
+[32m+[m		[32mdata->digitalstepleft = joyCountButtonsOnSpecificSamples(0, contnum, 0 | L_CBUTTONS);[m
+[32m+[m		[32mdata->digitalstepright = joyCountButtonsOnSpecificSamples(0, contnum, 0 | R_CBUTTONS);[m
+ 	}[m
+ [m
+ 	// Forward/back[m
+[1mdiff --git a/src/game/bondeyespy.c b/src/game/bondeyespy.c[m
+[1mindex 9dd2b7f43..2aa9d4c54 100644[m
+[1m--- a/src/game/bondeyespy.c[m
+[1m+++ b/src/game/bondeyespy.c[m
+[36m@@ -736,7 +736,7 @@[m [mvoid eyespyProcessInput(bool allowbuttons)[m
+ 		exitpressed = c1buttons & R_TRIG;[m
+ 		activatepressed = c1buttons & B_BUTTON;[m
+ 	} else if (controlmode <= CONTROLMODE_14) {[m
+[31m-		aimpressed = c1buttons & (L_TRIG | R_TRIG);[m
+[32m+[m		[32maimpressed = c1buttons & (0 | R_TRIG);[m
+ 		shootpressed = c1buttons & Z_TRIG;[m
+ 		exitpressed = c1buttons & A_BUTTON;[m
+ 		activatepressed = c1buttons & B_BUTTON;[m
+[36m@@ -816,18 +816,18 @@[m [mvoid eyespyProcessInput(bool allowbuttons)[m
+ 			forwardspeed = c1sticky;[m
+ 		}[m
+ [m
+[31m-		ascendspeed = (c1buttons & (U_CBUTTONS | U_JPAD) ? 1 : 0) - (c1buttons & (D_CBUTTONS | D_JPAD) ? 1 : 0);[m
+[31m-		sidespeed = (c1buttons & (R_CBUTTONS | R_JPAD) ? 1 : 0) - (c1buttons & (L_CBUTTONS | L_JPAD) ? 1 : 0);[m
+[32m+[m		[32mascendspeed = (c1buttons & (U_CBUTTONS | 0) ? 1 : 0) - (c1buttons & (D_CBUTTONS | 0) ? 1 : 0);[m
+[32m+[m		[32msidespeed = (c1buttons & (R_CBUTTONS | 0) ? 1 : 0) - (c1buttons & (L_CBUTTONS | 0) ? 1 : 0);[m
+ 	} else if (controlmode <= CONTROLMODE_14) {[m
+ 		if (aimpressed) {[m
+ 			domovecentre = false;[m
+ 			pitchspeed = c1sticky;[m
+ 		} else {[m
+ 			ascendspeed = c1sticky * 0.25f;[m
+[31m-			forwardspeed = (c1buttons & (U_CBUTTONS | U_JPAD) ? 24.0f : 0) - (c1buttons & (D_CBUTTONS | D_JPAD) ? 24.0f : 0);[m
+[32m+[m			[32mforwardspeed = (c1buttons & (U_CBUTTONS | 0) ? 24.0f : 0) - (c1buttons & (D_CBUTTONS | 0) ? 24.0f : 0);[m
+ 		}[m
+ [m
+[31m-		sidespeed = (c1buttons & (R_CBUTTONS | R_JPAD) ? 1 : 0) - (c1buttons & (L_CBUTTONS | L_JPAD) ? 1 : 0);[m
+[32m+[m		[32msidespeed = (c1buttons & (R_CBUTTONS | 0) ? 1 : 0) - (c1buttons & (L_CBUTTONS | 0) ? 1 : 0);[m
+ 	} else if (controlmode == CONTROLMODE_21 || controlmode == CONTROLMODE_23) {[m
+ 		forwardspeed = c1sticky;[m
+ [m
+[1mdiff --git a/src/game/bondmove.c b/src/game/bondmove.c[m
+[1mindex 2b8890203..735e9de37 100644[m
+[1m--- a/src/game/bondmove.c[m
+[1m+++ b/src/game/bondmove.c[m
+[36m@@ -1091,10 +1091,10 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 				if (controlmode == CONTROLMODE_13 || controlmode == CONTROLMODE_14) {[m
+ 					shootbuttons = A_BUTTON;[m
+ 					aimbuttons = Z_TRIG;[m
+[31m-					invbuttons = L_TRIG | R_TRIG;[m
+[32m+[m					[32minvbuttons = 0 | R_TRIG;[m
+ 				} else {[m
+ 					shootbuttons = Z_TRIG;[m
+[31m-					aimbuttons = L_TRIG | R_TRIG;[m
+[32m+[m					[32maimbuttons = 0 | R_TRIG;[m
+ 					invbuttons = A_BUTTON;[m
+ 				}[m
+ [m
+[36m@@ -1132,23 +1132,23 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 						// Handle side stepping[m
+ 						if (g_Vars.currentplayer->insightaimmode == false) {[m
+ 							if (allowc1buttons) {[m
+[31m-								movedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (L_JPAD | L_CBUTTONS));[m
+[31m-								movedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (R_JPAD | R_CBUTTONS));[m
+[32m+[m								[32mmovedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));[m
+[32m+[m								[32mmovedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));[m
+ 							}[m
+ 						} else {[m
+ 							// This doesn't appear to be r-leaning.[m
+ 							// R-leaning still works when these are commented.[m
+[31m-							if (c1buttons & (L_JPAD | L_CBUTTONS)) {[m
+[32m+[m							[32mif (c1buttons & (0 | L_CBUTTONS)) {[m
+ 								movedata.unk30 = 1;[m
+ 							}[m
+ [m
+[31m-							if (c1buttons & (R_JPAD | R_CBUTTONS)) {[m
+[32m+[m							[32mif (c1buttons & (0 | R_CBUTTONS)) {[m
+ 								movedata.unk34 = 1;[m
+ 							}[m
+ 						}[m
+ [m
+[31m-						movedata.digitalstepforward = !g_Vars.currentplayer->insightaimmode && (c1buttons & (U_JPAD | U_CBUTTONS));[m
+[31m-						movedata.digitalstepback = !g_Vars.currentplayer->insightaimmode && (c1buttons & (D_JPAD | D_CBUTTONS));[m
+[32m+[m						[32mmovedata.digitalstepforward = !g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | U_CBUTTONS));[m
+[32m+[m						[32mmovedata.digitalstepback = !g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | D_CBUTTONS));[m
+ 						movedata.canlookahead = false;[m
+ 						movedata.cannaturalpitch = !g_Vars.currentplayer->insightaimmode;[m
+ 						movedata.speedvertadown = 0;[m
+[36m@@ -1165,17 +1165,17 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 						}[m
+ 					} else {[m
+ 						// 1.1 or 1.3[m
+[31m-						if (c1buttons & (L_JPAD | L_CBUTTONS)) {[m
+[32m+[m						[32mif (c1buttons & (0 | L_CBUTTONS)) {[m
+ 							movedata.unk30 = 1;[m
+ 						}[m
+ [m
+[31m-						if (c1buttons & (R_JPAD | R_CBUTTONS)) {[m
+[32m+[m						[32mif (c1buttons & (0 | R_CBUTTONS)) {[m
+ 							movedata.unk34 = 1;[m
+ 						}[m
+ [m
+ 						if (!g_Vars.currentplayer->insightaimmode && allowc1buttons) {[m
+[31m-							movedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (L_JPAD | L_CBUTTONS));[m
+[31m-							movedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (R_JPAD | R_CBUTTONS));[m
+[32m+[m							[32mmovedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));[m
+[32m+[m							[32mmovedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));[m
+ 						}[m
+ [m
+ 						movedata.digitalstepforward = false;[m
+[36m@@ -1184,11 +1184,11 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 						movedata.cannaturalpitch = false;[m
+ [m
+ 						// Looking up/down[m
+[31m-						if (!g_Vars.currentplayer->insightaimmode && (c1buttons & (U_JPAD | U_CBUTTONS))) {[m
+[32m+[m						[32mif (!g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | U_CBUTTONS))) {[m
+ 							movedata.speedvertadown = 1;[m
+ 						}[m
+ [m
+[31m-						if (!g_Vars.currentplayer->insightaimmode && (c1buttons & (D_JPAD | D_CBUTTONS))) {[m
+[32m+[m						[32mif (!g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | D_CBUTTONS))) {[m
+ 							movedata.speedvertaup = 1;[m
+ 						}[m
+ [m
+[36m@@ -1320,8 +1320,8 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 					// Handle manual zoom in and out (sniper, farsight and horizon scanner)[m
+ 					if (canmanualzoom && g_Vars.currentplayer->insightaimmode) {[m
+ 						increment = 1;[m
+[31m-						zoomout = c1buttons & (D_JPAD | D_CBUTTONS);[m
+[31m-						zoomin = c1buttons & (U_JPAD | U_CBUTTONS);[m
+[32m+[m						[32mzoomout = c1buttons & (0 | D_CBUTTONS);[m
+[32m+[m						[32mzoomin = c1buttons & (0 | U_CBUTTONS);[m
+ [m
+ 						// @bug? Should this be HAND_RIGHT?[m
+ 						if (bgunGetWeaponNum(HAND_LEFT) == WEAPON_FARSIGHT) {[m
+[36m@@ -1341,7 +1341,7 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 					if (allowc1buttons) {[m
+ 						for (i = 0; i < numsamples; i++) {[m
+ 							if (!canmanualzoom && aimonhist[i]) {[m
+[31m-								if (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (U_JPAD | U_CBUTTONS))) {[m
+[32m+[m								[32mif (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (0 | U_CBUTTONS))) {[m
+ 									if (movedata.crouchdown) {[m
+ 										movedata.crouchdown--;[m
+ 									} else {[m
+[36m@@ -1351,7 +1351,7 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 									g_Vars.currentplayer->aimtaptime = -1;[m
+ 								}[m
+ [m
+[31m-								if (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (D_JPAD | D_CBUTTONS))) {[m
+[32m+[m								[32mif (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (0 | D_CBUTTONS))) {[m
+ 									if (movedata.crouchup) {[m
+ 										movedata.crouchup--;[m
+ 									} else {[m
+[36m@@ -1391,14 +1391,14 @@[m [mvoid bmoveProcessInput(bool allowc1x, bool allowc1y, bool allowc1buttons, bool i[m
+ 							&& g_Vars.coopplayernum <= -1) {[m
+ 						movedata.eyesshut = g_Vars.currentplayer->insightaimmode[m
+ 							&& !canmanualzoom[m
+[31m-							&& joyGetButtons(contpad1, c1allowedbuttons & (D_JPAD | D_CBUTTONS));[m
+[32m+[m							[32m&& joyGetButtons(contpad1, c1allowedbuttons & (0 | D_CBUTTONS));[m
+ 					}[m
+ [m
+ 					if (bgunGetWeaponNum(HAND_RIGHT) == WEAPON_FARSIGHT) {[m
+[31m-						movedata.farsighttempautoseek = g_Vars.currentplayer->insightaimmode && (c1buttons & (L_CBUTTONS | R_CBUTTONS | L_JPAD | R_JPAD));[m
+[32m+[m						[32mmovedata.farsighttempautoseek = g_Vars.currentplayer->insightaimmode && (c1buttons & (L_CBUTTONS | R_CBUTTONS | 0 | 0));[m
+ 					} else {[m
+[31m-						movedata.rleanleft = g_Vars.currentplayer->insightaimmode && (c1buttons & (L_JPAD | L_CBUTTONS));[m
+[31m-						movedata.rleanright = g_Vars.currentplayer->insightaimmode && (c1buttons & (R_JPAD | R_CBUTTONS));[m
+[32m+[m						[32mmovedata.rleanleft = g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | L_CBUTTONS));[m
+[32m+[m						[32mmovedata.rleanright = g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | R_CBUTTONS));[m
+ 					}[m
+ [m
+ 					// Handle mine detonation[m
+[1mdiff --git a/src/game/bondview.c b/src/game/bondview.c[m
+[1mindex 1b4960976..d0da357b7 100644[m
+[1m--- a/src/game/bondview.c[m
+[1m+++ b/src/game/bondview.c[m
+[36m@@ -1259,32 +1259,32 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			// Up[m
+ 			if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_CAMSPY) {[m
+ 				brightness = 20; \[m
+[31m-				if (buttonsdown & (U_JPAD | U_CBUTTONS)) { \[m
+[32m+[m				[32mif (buttonsdown & (0 | U_CBUTTONS)) { \[m
+ 					brightness += 20; \[m
+ 				} \[m
+[31m-				if (buttonsthisframe & (U_JPAD | U_CBUTTONS)) { \[m
+[32m+[m				[32mif (buttonsthisframe & (0 | U_CBUTTONS)) { \[m
+ 					brightness += 20; \[m
+ 				} \[m
+ 				gDPSetPrimColor(gdl++, 0, 0, 0, brightness, 0, 0xff); \[m
+ 			} else if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_DRUGSPY) {[m
+ 				brightness = 127;[m
+ [m
+[31m-				if (buttonsdown & (U_JPAD | U_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | U_CBUTTONS)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (U_JPAD | U_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | U_CBUTTONS)) {[m
+ 					brightness += 63; \[m
+ 				} \[m
+ 				gDPSetPrimColor(gdl++, 0, 0, 0x10, 0x20, brightness, 0xff);[m
+ 			} else {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (U_JPAD | U_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | U_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (U_JPAD | U_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | U_CBUTTONS)) {[m
+ 					brightness += 20; \[m
+ 				} \[m
+ 				gDPSetPrimColor(gdl++, 0, 0, brightness, brightness >> 2, 0, 0xff);[m
+[36m@@ -1297,10 +1297,10 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_CAMSPY) {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (D_JPAD | D_CBUTTONS)) { \[m
+[32m+[m				[32mif (buttonsdown & (0 | D_CBUTTONS)) { \[m
+ 					brightness += 20; \[m
+ 				} \[m
+[31m-				if (buttonsthisframe & (D_JPAD | D_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | D_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[36m@@ -1308,11 +1308,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_DRUGSPY) {[m
+ 				brightness = 127;[m
+ [m
+[31m-				if (buttonsdown & (D_JPAD | D_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | D_CBUTTONS)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (D_JPAD | D_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | D_CBUTTONS)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[36m@@ -1320,11 +1320,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (D_JPAD | D_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | D_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (D_JPAD | D_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | D_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[36m@@ -1338,10 +1338,10 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_CAMSPY) {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (L_JPAD | L_CBUTTONS)) { \[m
+[32m+[m				[32mif (buttonsdown & (0 | L_CBUTTONS)) { \[m
+ 					brightness += 20; \[m
+ 				} \[m
+[31m-				if (buttonsthisframe & (L_JPAD | L_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | L_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[36m@@ -1349,11 +1349,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_DRUGSPY) {[m
+ 				brightness = 127;[m
+ [m
+[31m-				if (buttonsdown & (L_JPAD | L_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | L_CBUTTONS)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (L_JPAD | L_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | L_CBUTTONS)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[36m@@ -1361,11 +1361,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (L_JPAD | L_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | L_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (L_JPAD | L_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | L_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[36m@@ -1379,10 +1379,10 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_CAMSPY) {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (R_JPAD | R_CBUTTONS)) { \[m
+[32m+[m				[32mif (buttonsdown & (0 | R_CBUTTONS)) { \[m
+ 					brightness += 20; \[m
+ 				} \[m
+[31m-				if (buttonsthisframe & (R_JPAD | R_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | R_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[36m@@ -1390,11 +1390,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_DRUGSPY) {[m
+ 				brightness = 127;[m
+ [m
+[31m-				if (buttonsdown & (R_JPAD | R_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | R_CBUTTONS)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (R_JPAD | R_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | R_CBUTTONS)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[36m@@ -1402,11 +1402,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (R_JPAD | R_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | R_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (R_JPAD | R_CBUTTONS)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | R_CBUTTONS)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[36m@@ -1420,10 +1420,10 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_CAMSPY) {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (L_TRIG | R_TRIG)) { \[m
+[32m+[m				[32mif (buttonsdown & (0 | R_TRIG)) { \[m
+ 					brightness += 20; \[m
+ 				} \[m
+[31m-				if (buttonsthisframe & (L_TRIG | R_TRIG)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | R_TRIG)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[36m@@ -1431,11 +1431,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else if (g_Vars.currentplayer->eyespy->mode == EYESPYMODE_DRUGSPY) {[m
+ 				brightness = 127;[m
+ [m
+[31m-				if (buttonsdown & (L_TRIG | R_TRIG)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | R_TRIG)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (L_TRIG | R_TRIG)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | R_TRIG)) {[m
+ 					brightness += 63;[m
+ 				}[m
+ [m
+[36m@@ -1443,11 +1443,11 @@[m [mGfx *bviewDrawEyespyMetrics(Gfx *gdl)[m
+ 			} else {[m
+ 				brightness = 20;[m
+ [m
+[31m-				if (buttonsdown & (L_TRIG | R_TRIG)) {[m
+[32m+[m				[32mif (buttonsdown & (0 | R_TRIG)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[31m-				if (buttonsthisframe & (L_TRIG | R_TRIG)) {[m
+[32m+[m				[32mif (buttonsthisframe & (0 | R_TRIG)) {[m
+ 					brightness += 20;[m
+ 				}[m
+ [m
+[1mdiff --git a/src/game/credits.c b/src/game/credits.c[m
+[1mindex 6226594c2..cff1622e6 100644[m
+[1m--- a/src/game/credits.c[m
+[1m+++ b/src/game/credits.c[m
+[36m@@ -684,7 +684,7 @@[m [mvoid creditsTickParticles(void)[m
+ 		}[m
+ 	} else {[m
+ #if VERSION >= VERSION_NTSC_1_0[m
+[31m-		if (RANDOMFRAC() < 0.007f && joyGetButtons(0, L_TRIG | R_TRIG) == 0) {[m
+[32m+[m		[32mif (RANDOMFRAC() < 0.007f && joyGetButtons(0, 0 | R_TRIG) == 0) {[m
+ 			g_CreditsData->particlecolourindex1 = random() % 4;[m
+ 			g_CreditsData->particlecolourweight = 0;[m
+ 		}[m
+[36m@@ -697,7 +697,7 @@[m [mvoid creditsTickParticles(void)[m
+ 	}[m
+ [m
+ #if VERSION >= VERSION_NTSC_1_0[m
+[31m-	if (RANDOMFRAC() < 0.002f && joyGetButtons(0, L_TRIG | R_TRIG) == 0) {[m
+[32m+[m	[32mif (RANDOMFRAC() < 0.002f && joyGetButtons(0, 0 | R_TRIG) == 0) {[m
+ 		g_CreditsData->particlemovetype = random() % 5;[m
+ 	}[m
+ #else[m
+[36m@@ -1681,7 +1681,7 @@[m [mvoid creditsTick(void)[m
+ 	static u32 type = 0xffff;[m
+ [m
+ #if VERSION >= VERSION_NTSC_1_0[m
+[31m-	if (joyGetButtonsPressedThisFrame(0, L_TRIG)) {[m
+[32m+[m	[32mif (joyGetButtonsPressedThisFrame(0, 0)) {[m
+ 		creditsCreatePendingBgLayers(0xffffffff);[m
+ 	}[m
+ #endif[m
+[36m@@ -1721,7 +1721,7 @@[m [mvoid creditsTick(void)[m
+ [m
+ 	if (g_CreditsData->slidesenabled) {[m
+ 		creditsTickSlide();[m
+[31m-	} else if (RANDOMFRAC() < 0.01f && !joyGetButtons(0, L_TRIG | R_TRIG)) {[m
+[32m+[m	[32m} else if (RANDOMFRAC() < 0.01f && !joyGetButtons(0, 0 | R_TRIG)) {[m
+ 		creditsCreatePendingBgLayers(0xffffffff);[m
+ 	}[m
+ [m
+[1mdiff --git a/src/game/lv.c b/src/game/lv.c[m
+[1mindex d4134f4fa..d5b6c25e6 100644[m
+[1m--- a/src/game/lv.c[m
+[1m+++ b/src/game/lv.c[m
+[36m@@ -951,6 +951,155 @@[m [mvoid lvFindThreats(void)[m
+ 	}[m
+ }[m
+ [m
+[32m+[m[32mu8 g_LvShowRates = 0;[m
+[32m+[m[32mu8 g_LvAntialias = 1;[m
+[32m+[m[32mu8 g_LvRateIndex = 59;[m
+[32m+[m[32mu8 g_LvFrameRates[60];[m
+[32m+[m
+[32m+[m[32mvoid lvRecordRate(void)[m
+[32m+[m[32m{[m
+[32m+[m	[32mg_LvFrameRates[g_LvRateIndex] = OS_CPU_COUNTER / g_Vars.diffframet;[m
+[32m+[m
+[32m+[m	[32mg_LvRateIndex++;[m
+[32m+[m
+[32m+[m	[32mif (g_LvRateIndex >= 60) {[m
+[32m+[m		[32mg_LvRateIndex = 0;[m
+[32m+[m	[32m}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mGfx *func0f153134(Gfx *gdl);[m
+[32m+[m
+[32m+[m[32mGfx *lvPrintRateGraph(Gfx *gdl)[m
+[32m+[m[32m{[m
+[32m+[m	[32ms32 i;[m
+[32m+[m	[32ms32 top = 10;[m
+[32m+[m	[32ms32 bottom = 70;[m
+[32m+[m	[32ms32 x;[m
+[32m+[m	[32ms32 y;[m
+[32m+[m
+[32m+[m	[32mgdl = func0f153134(gdl);[m
+[32m+[m
+[32m+[m	[32m// graph data[m
+[32m+[m	[32mgdl = textSetPrimColour(gdl, 0x00ff00a0);[m
+[32m+[m
+[32m+[m	[32mfor (i = 0; i < 60; i++) {[m
+[32m+[m		[32ms32 index = (g_LvRateIndex + i) % 60;[m
+[32m+[m
+[32m+[m		[32mx = 10 + i * 2;[m
+[32m+[m		[32my = top + 60 - g_LvFrameRates[index];[m
+[32m+[m
+[32m+[m		[32mgDPFillRectangleScaled(gdl++, x, y, x + 2, bottom);[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mgdl = text0f153838(gdl);[m
+[32m+[m
+[32m+[m	[32m// grid lines[m
+[32m+[m	[32mgdl = textSetPrimColour(gdl, 0x000000a0);[m
+[32m+[m
+[32m+[m	[32mgDPFillRectangleScaled(gdl++, 10, 10, 130, 11);[m
+[32m+[m	[32mgDPFillRectangleScaled(gdl++, 10, 20, 130, 21);[m
+[32m+[m	[32mgDPFillRectangleScaled(gdl++, 10, 30, 130, 31);[m
+[32m+[m	[32mgDPFillRectangleScaled(gdl++, 10, 40, 130, 41);[m
+[32m+[m	[32mgDPFillRectangleScaled(gdl++, 10, 50, 130, 51);[m
+[32m+[m	[32mgDPFillRectangleScaled(gdl++, 10, 60, 130, 61);[m
+[32m+[m	[32mgDPFillRectangleScaled(gdl++, 10, 70, 130, 71);[m
+[32m+[m
+[32m+[m	[32m// labels[m
+[32m+[m	[32mgdl = func0f0d479c(gdl);[m
+[32m+[m
+[32m+[m	[32mif (g_FontHandelGothicXs) {[m
+[32m+[m		[32mx = 120 + 15;[m
+[32m+[m		[32my = 7;[m
+[32m+[m		[32mgdl = textRender(gdl, &x, &y, "60", g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);[m
+[32m+[m
+[32m+[m		[32mx = 120 + 15;[m
+[32m+[m		[32my = 37;[m
+[32m+[m		[32mgdl = textRender(gdl, &x, &y, "30", g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mreturn gdl;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mGfx *lvPrintRateText(Gfx *gdl)[m
+[32m+[m[32m{[m
+[32m+[m	[32mif (g_FontHandelGothicXs) {[m
+[32m+[m		[32mchar buffer[64];[m
+[32m+[m		[32ms32 x = 10;[m
+[32m+[m		[32ms32 y = 80;[m
+[32m+[m		[32ms32 i;[m
+[32m+[m		[32ms32 sum = 0;[m
+[32m+[m		[32ms32 count = 0;[m
+[32m+[m		[32mu32 min = 0xffffffff;[m
+[32m+[m		[32mu32 max = 0;[m
+[32m+[m
+[32m+[m		[32mfor (i = 0; i < 60; i++) {[m
+[32m+[m			[32mif (g_LvFrameRates[i]) {[m
+[32m+[m				[32msum += g_LvFrameRates[i];[m
+[32m+[m				[32mcount++;[m
+[32m+[m
+[32m+[m				[32mif (g_LvFrameRates[i] < min) {[m
+[32m+[m					[32mmin = g_LvFrameRates[i];[m
+[32m+[m				[32m}[m
+[32m+[m
+[32m+[m				[32mif (g_LvFrameRates[i] > max) {[m
+[32m+[m					[32mmax = g_LvFrameRates[i];[m
+[32m+[m				[32m}[m
+[32m+[m			[32m}[m
+[32m+[m		[32m}[m
+[32m+[m
+[32m+[m		[32mif (count) {[m
+[32m+[m			[32mx = 10;[m
+[32m+[m			[32msprintf(buffer, "min %d", min);[m
+[32m+[m			[32mgdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);[m
+[32m+[m
+[32m+[m			[32mx = 50;[m
+[32m+[m			[32msprintf(buffer, "max %d", max);[m
+[32m+[m			[32mgdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);[m
+[32m+[m
+[32m+[m			[32mx = 90;[m
+[32m+[m			[32msprintf(buffer, "avg %d", sum / count);[m
+[32m+[m			[32mgdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);[m
+[32m+[m
+[32m+[m			[32mx = 130;[m
+[32m+[m			[32msprintf(buffer, "cur %d\n\n", (s32) (OS_CPU_COUNTER / g_Vars.diffframet));[m
+[32m+[m			[32mgdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);[m
+[32m+[m		[32m}[m
+[32m+[m
+[32m+[m		[32mx = 10;[m
+[32m+[m		[32msprintf(buffer, "Antialias %s\n", g_LvAntialias ? "on" : "off");[m
+[32m+[m		[32mgdl = textRender(gdl, &x, &y, buffer, g_CharsHandelGothicXs, g_FontHandelGothicXs, 0x00ff00a0, 0x000000a0, viGetWidth(), viGetHeight(), 0, 0);[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mreturn gdl;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mGfx *lvPrint(Gfx *gdl)[m
+[32m+[m[32m{[m
+[32m+[m	[32mif (joyGetButtonsPressedThisFrame(0, L_TRIG)) {[m
+[32m+[m		[32mg_LvShowRates = 1 - g_LvShowRates;[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mif (joyGetButtonsPressedThisFrame(0, U_JPAD)) {[m
+[32m+[m		[32mg_LvAntialias = 1 - g_LvAntialias;[m
+[32m+[m		[32mviUpdateMode();[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mlvRecordRate();[m
+[32m+[m
+[32m+[m	[32mif (g_LvShowRates) {[m
+[32m+[m		[32mg_ScaleX = g_ViRes == VIRES_HI ? 2 : 1;[m
+[32m+[m
+[32m+[m		[32mgdl = text0f153628(gdl);[m
+[32m+[m		[32mgdl = lvPrintRateGraph(gdl);[m
+[32m+[m		[32mgdl = lvPrintRateText(gdl);[m
+[32m+[m		[32mgdl = text0f153780(gdl);[m
+[32m+[m
+[32m+[m		[32mg_ScaleX = 1;[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mreturn gdl;[m
+[32m+[m[32m}[m
+[32m+[m
+ /**[m
+  * Renders a complete frame for all players, and also does some other game logic[m
+  * that really doesn't belong here.[m
+[36m@@ -1725,6 +1874,8 @@[m [mGfx *lvRender(Gfx *gdl)[m
+ 	}[m
+ #endif[m
+ [m
+[32m+[m	[32mgdl = lvPrint(gdl);[m
+[32m+[m
+ 	return gdl;[m
+ }[m
+ [m
+[1mdiff --git a/src/game/menu.c b/src/game/menu.c[m
+[1mindex 898962604..0883fa08b 100644[m
+[1m--- a/src/game/menu.c[m
+[1m+++ b/src/game/menu.c[m
+[36m@@ -2131,7 +2131,7 @@[m [mGfx *menuRenderModel(Gfx *gdl, struct menumodel *menumodel, s32 modeltype)[m
+ [m
+ 			modelGetRootPosition(&menumodel->bodymodel, &oldpos);[m
+ [m
+[31m-			if (joyGetButtons(0, L_TRIG)) {[m
+[32m+[m			[32mif (joyGetButtons(0, 0)) {[m
+ 				modelSetRootPosition(&menumodel->bodymodel, &newpos);[m
+ 			}[m
+ 		}[m
+[36m@@ -4603,7 +4603,7 @@[m [mvoid menuProcessInput(void)[m
+ 				inputs.shoulder = 1;[m
+ 			}[m
+ [m
+[31m-			if (buttons & L_TRIG) {[m
+[32m+[m			[32mif (buttons & 0) {[m
+ 				inputs.shoulder = 1;[m
+ 			}[m
+ [m
+[36m@@ -4647,35 +4647,35 @@[m [mvoid menuProcessInput(void)[m
+ 				xtapdir = 1;[m
+ 			}[m
+ [m
+[31m-			if (buttons & U_JPAD) {[m
+[32m+[m			[32mif (buttons & 0) {[m
+ 				yhelddir = -1;[m
+ 			}[m
+ [m
+[31m-			if (buttonsnow & U_JPAD) {[m
+[32m+[m			[32mif (buttonsnow & 0) {[m
+ 				ytapdir = -1;[m
+ 			}[m
+ [m
+[31m-			if (buttons & D_JPAD) {[m
+[32m+[m			[32mif (buttons & 0) {[m
+ 				yhelddir = 1;[m
+ 			}[m
+ [m
+[31m-			if (buttonsnow & D_JPAD) {[m
+[32m+[m			[32mif (buttonsnow & 0) {[m
+ 				ytapdir = 1;[m
+ 			}[m
+ [m
+[31m-			if (buttons & L_JPAD) {[m
+[32m+[m			[32mif (buttons & 0) {[m
+ 				xhelddir = -1;[m
+ 			}[m
+ [m
+[31m-			if (buttonsnow & L_JPAD) {[m
+[32m+[m			[32mif (buttonsnow & 0) {[m
+ 				xtapdir = -1;[m
+ 			}[m
+ [m
+[31m-			if (buttons & R_JPAD) {[m
+[32m+[m			[32mif (buttons & 0) {[m
+ 				xhelddir = 1;[m
+ 			}[m
+ [m
+[31m-			if (buttonsnow & R_JPAD) {[m
+[32m+[m			[32mif (buttonsnow & 0) {[m
+ 				xtapdir = 1;[m
+ 			}[m
+ 		}[m
+[1mdiff --git a/src/game/player.c b/src/game/player.c[m
+[1mindex 2603d7464..a5787ea1a 100644[m
+[1m--- a/src/game/player.c[m
+[1m+++ b/src/game/player.c[m
+[36m@@ -3486,7 +3486,7 @@[m [mvoid playerTick(bool arg0)[m
+ 								explode = true;[m
+ 							}[m
+ [m
+[31m-							if (joyGetButtons(contpad1, B_BUTTON | Z_TRIG | L_TRIG | R_TRIG)) {[m
+[32m+[m							[32mif (joyGetButtons(contpad1, B_BUTTON | Z_TRIG | 0 | R_TRIG)) {[m
+ 								slow = true;[m
+ 							}[m
+ 						} else {[m
+[36m@@ -3494,7 +3494,7 @@[m [mvoid playerTick(bool arg0)[m
+ 								explode = true;[m
+ 							}[m
+ [m
+[31m-							if (joyGetButtons(contpad1, A_BUTTON | B_BUTTON | L_TRIG | R_TRIG)) {[m
+[32m+[m							[32mif (joyGetButtons(contpad1, A_BUTTON | B_BUTTON | 0 | R_TRIG)) {[m
+ 								slow = true;[m
+ 							}[m
+ 						}[m
+[36m@@ -4058,7 +4058,7 @@[m [mvoid playerTick(bool arg0)[m
+ [m
+ 		if (!lvIsPaused()[m
+ 				&& arg0[m
+[31m-				&& joyGetButtonsPressedThisFrame(contpad1, A_BUTTON | B_BUTTON | Z_TRIG | START_BUTTON | L_TRIG | R_TRIG)) {[m
+[32m+[m				[32m&& joyGetButtonsPressedThisFrame(contpad1, A_BUTTON | B_BUTTON | Z_TRIG | START_BUTTON | 0 | R_TRIG)) {[m
+ 			var8007074c = 2;[m
+ [m
+ 			if (playerIsFadeComplete()) {[m
+[1mdiff --git a/src/lib/sched.c b/src/lib/sched.c[m
+[1mindex 266e4cb68..4dac40fec 100644[m
+[1m--- a/src/lib/sched.c[m
+[1m+++ b/src/lib/sched.c[m
+[36m@@ -255,11 +255,9 @@[m [mvoid __scMain(void *arg)[m
+ 			__scHandleRetrace(sc);[m
+ 			__scHandleTasks(sc);[m
+ 			break;[m
+[31m-[m
+ 		case RSP_DONE_MSG:[m
+ 			__scHandleRSP(sc);[m
+ 			break;[m
+[31m-[m
+ 		case RDP_DONE_MSG:[m
+ 			/**[m
+ 			 * The RDP has completed a graphics task. Set the freeze bit so the[m
+[36m@@ -620,6 +618,8 @@[m [mOSScTask *__scTaskReady(OSScTask *t)[m
+ 	return 0;[m
+ }[m
+ [m
+[32m+[m[32mextern u8 g_LvAntialias;[m
+[32m+[m
+ /*[m
+  * __scTaskComplete checks to see if the task is complete (all RCP[m
+  * operations have been performed) and sends the done message to the[m
+[36m@@ -646,6 +646,7 @@[m [ms32 __scTaskComplete(OSSched *sc, OSScTask *t)[m
+ 						|| var8008dd60[1 - var8005ce74]->fldRegs[0].origin != var8008dcc0[1 - var8005ce74].fldRegs[0].origin[m
+ 						|| var8008dd60[1 - var8005ce74]->fldRegs[1].origin != var8008dcc0[1 - var8005ce74].fldRegs[1].origin) {[m
+ 					s32 mask = osSetIntMask(OS_IM_VI);[m
+[32m+[m					[32mu32 features;[m
+ [m
+ 					*var8008dd60[1 - var8005ce74] = var8008dcc0[1 - var8005ce74];[m
+ [m
+[36m@@ -655,7 +656,16 @@[m [ms32 __scTaskComplete(OSSched *sc, OSScTask *t)[m
+ 					osViBlack(g_ViUnblackTimer);[m
+ 					osViSetXScale(g_ViXScalesBySlot[1 - var8005ce74]);[m
+ 					osViSetYScale(g_ViYScalesBySlot[1 - var8005ce74]);[m
+[31m-					osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_DITHER_FILTER_ON);[m
+[32m+[m
+[32m+[m					[32mfeatures = OS_VI_GAMMA_OFF;[m
+[32m+[m
+[32m+[m					[32mif (g_LvAntialias) {[m
+[32m+[m						[32mfeatures |= OS_VI_DITHER_FILTER_ON;[m
+[32m+[m					[32m} else {[m
+[32m+[m						[32mfeatures |= OS_VI_DITHER_FILTER_OFF;[m
+[32m+[m					[32m}[m
+[32m+[m
+[32m+[m					[32mosViSetSpecialFeatures(features);[m
+ 				}[m
+ [m
+ 				g_SchedViModesPending[1 - var8005ce74] = false;[m
+[1mdiff --git a/src/lib/vi.c b/src/lib/vi.c[m
+[1mindex 77124383b..9868eef33 100644[m
+[1m--- a/src/lib/vi.c[m
+[1m+++ b/src/lib/vi.c[m
+[36m@@ -249,11 +249,14 @@[m [mvoid viBlack(bool black)[m
+ 	g_ViUnblackTimer = black;[m
+ }[m
+ [m
+[32m+[m[32mextern u8 g_LvAntialias;[m
+[32m+[m
+ void viHandleRetrace(void)[m
+ {[m
+ 	s32 prevmask;[m
+ 	s32 offset;[m
+ 	s32 reg;[m
+[32m+[m	[32mu32 features;[m
+ [m
+ 	if (g_ViShakeTimer != 0) {[m
+ 		g_ViShakeTimer--;[m
+[36m@@ -284,7 +287,16 @@[m [mvoid viHandleRetrace(void)[m
+ 	osViBlack(g_ViUnblackTimer);[m
+ 	osViSetXScale(g_ViXScalesBySlot[1 - var8005ce74]);[m
+ 	osViSetYScale(g_ViYScalesBySlot[1 - var8005ce74]);[m
+[31m-	osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_DITHER_FILTER_ON);[m
+[32m+[m
+[32m+[m	[32mfeatures = OS_VI_GAMMA_OFF;[m
+[32m+[m
+[32m+[m	[32mif (g_LvAntialias) {[m
+[32m+[m		[32mfeatures |= OS_VI_DITHER_FILTER_ON;[m
+[32m+[m	[32m} else {[m
+[32m+[m		[32mfeatures |= OS_VI_DITHER_FILTER_OFF;[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mosViSetSpecialFeatures(features);[m
+ }[m
+ [m
+ void viUpdateMode(void)[m

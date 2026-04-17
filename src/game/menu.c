@@ -2135,8 +2135,8 @@ Gfx *menu_render_model(Gfx *gdl, struct menumodel *menumodel, s32 modeltype)
 
 			model_get_root_position(&menumodel->bodymodel, &oldpos);
 
-			if (joy_get_buttons(0, L_TRIG)) {
-				model_set_root_position(&menumodel->bodymodel, &newpos);
+			if (joyGetButtons(0, 0)) {
+				modelSetRootPosition(&menumodel->bodymodel, &newpos);
 			}
 		}
 #endif
@@ -4617,7 +4617,7 @@ void menu_process_input(void)
 				inputs.shoulder = 1;
 			}
 
-			if (buttons & L_TRIG) {
+			if (buttons & 0) {
 				inputs.shoulder = 1;
 			}
 
@@ -4661,35 +4661,35 @@ void menu_process_input(void)
 				xtapdir = 1;
 			}
 
-			if (buttons & U_JPAD) {
+			if (buttons & 0) {
 				yhelddir = -1;
 			}
 
-			if (buttonsnow & U_JPAD) {
+			if (buttonsnow & 0) {
 				ytapdir = -1;
 			}
 
-			if (buttons & D_JPAD) {
+			if (buttons & 0) {
 				yhelddir = 1;
 			}
 
-			if (buttonsnow & D_JPAD) {
+			if (buttonsnow & 0) {
 				ytapdir = 1;
 			}
 
-			if (buttons & L_JPAD) {
+			if (buttons & 0) {
 				xhelddir = -1;
 			}
 
-			if (buttonsnow & L_JPAD) {
+			if (buttonsnow & 0) {
 				xtapdir = -1;
 			}
 
-			if (buttons & R_JPAD) {
+			if (buttons & 0) {
 				xhelddir = 1;
 			}
 
-			if (buttonsnow & R_JPAD) {
+			if (buttonsnow & 0) {
 				xtapdir = 1;
 			}
 		}

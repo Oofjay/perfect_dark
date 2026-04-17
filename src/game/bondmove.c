@@ -1091,10 +1091,10 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 				if (controlmode == CONTROLMODE_13 || controlmode == CONTROLMODE_14) {
 					shootbuttons = A_BUTTON;
 					aimbuttons = Z_TRIG;
-					invbuttons = L_TRIG | R_TRIG;
+					invbuttons = 0 | R_TRIG;
 				} else {
 					shootbuttons = Z_TRIG;
-					aimbuttons = L_TRIG | R_TRIG;
+					aimbuttons = 0 | R_TRIG;
 					invbuttons = A_BUTTON;
 				}
 
@@ -1132,23 +1132,23 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 						// Handle side stepping
 						if (g_Vars.currentplayer->insightaimmode == false) {
 							if (allowc1buttons) {
-								movedata.digitalstepleft = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (L_JPAD | L_CBUTTONS));
-								movedata.digitalstepright = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (R_JPAD | R_CBUTTONS));
+								movedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));
+								movedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));
 							}
 						} else {
 							// This doesn't appear to be r-leaning.
 							// R-leaning still works when these are commented.
-							if (c1buttons & (L_JPAD | L_CBUTTONS)) {
+							if (c1buttons & (0 | L_CBUTTONS)) {
 								movedata.unk30 = 1;
 							}
 
-							if (c1buttons & (R_JPAD | R_CBUTTONS)) {
+							if (c1buttons & (0 | R_CBUTTONS)) {
 								movedata.unk34 = 1;
 							}
 						}
 
-						movedata.digitalstepforward = !g_Vars.currentplayer->insightaimmode && (c1buttons & (U_JPAD | U_CBUTTONS));
-						movedata.digitalstepback = !g_Vars.currentplayer->insightaimmode && (c1buttons & (D_JPAD | D_CBUTTONS));
+						movedata.digitalstepforward = !g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | U_CBUTTONS));
+						movedata.digitalstepback = !g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | D_CBUTTONS));
 						movedata.canlookahead = false;
 						movedata.cannaturalpitch = !g_Vars.currentplayer->insightaimmode;
 						movedata.speedvertadown = 0;
@@ -1165,17 +1165,17 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 						}
 					} else {
 						// 1.1 or 1.3
-						if (c1buttons & (L_JPAD | L_CBUTTONS)) {
+						if (c1buttons & (0 | L_CBUTTONS)) {
 							movedata.unk30 = 1;
 						}
 
-						if (c1buttons & (R_JPAD | R_CBUTTONS)) {
+						if (c1buttons & (0 | R_CBUTTONS)) {
 							movedata.unk34 = 1;
 						}
 
 						if (!g_Vars.currentplayer->insightaimmode && allowc1buttons) {
-							movedata.digitalstepleft = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (L_JPAD | L_CBUTTONS));
-							movedata.digitalstepright = joy_count_buttons_on_specific_samples(aimoffhist, contpad1, c1allowedbuttons & (R_JPAD | R_CBUTTONS));
+							movedata.digitalstepleft = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | L_CBUTTONS));
+							movedata.digitalstepright = joyCountButtonsOnSpecificSamples(aimoffhist, contpad1, c1allowedbuttons & (0 | R_CBUTTONS));
 						}
 
 						movedata.digitalstepforward = false;
@@ -1184,11 +1184,11 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 						movedata.cannaturalpitch = false;
 
 						// Looking up/down
-						if (!g_Vars.currentplayer->insightaimmode && (c1buttons & (U_JPAD | U_CBUTTONS))) {
+						if (!g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | U_CBUTTONS))) {
 							movedata.speedvertadown = 1;
 						}
 
-						if (!g_Vars.currentplayer->insightaimmode && (c1buttons & (D_JPAD | D_CBUTTONS))) {
+						if (!g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | D_CBUTTONS))) {
 							movedata.speedvertaup = 1;
 						}
 
@@ -1320,8 +1320,8 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 					// Handle manual zoom in and out (sniper, farsight and horizon scanner)
 					if (canmanualzoom && g_Vars.currentplayer->insightaimmode) {
 						increment = 1;
-						zoomout = c1buttons & (D_JPAD | D_CBUTTONS);
-						zoomin = c1buttons & (U_JPAD | U_CBUTTONS);
+						zoomout = c1buttons & (0 | D_CBUTTONS);
+						zoomin = c1buttons & (0 | U_CBUTTONS);
 
 						// @bug? Should this be HAND_RIGHT?
 						if (bgun_get_weapon_num(HAND_LEFT) == WEAPON_FARSIGHT) {
@@ -1341,7 +1341,7 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 					if (allowc1buttons) {
 						for (i = 0; i < numsamples; i++) {
 							if (!canmanualzoom && aimonhist[i]) {
-								if (joy_get_buttons_pressed_on_sample(i, contpad1, c1allowedbuttons & (U_JPAD | U_CBUTTONS))) {
+								if (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (0 | U_CBUTTONS))) {
 									if (movedata.crouchdown) {
 										movedata.crouchdown--;
 									} else {
@@ -1351,7 +1351,7 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 									g_Vars.currentplayer->aimtaptime = -1;
 								}
 
-								if (joy_get_buttons_pressed_on_sample(i, contpad1, c1allowedbuttons & (D_JPAD | D_CBUTTONS))) {
+								if (joyGetButtonsPressedOnSample(i, contpad1, c1allowedbuttons & (0 | D_CBUTTONS))) {
 									if (movedata.crouchup) {
 										movedata.crouchup--;
 									} else {
@@ -1391,14 +1391,14 @@ void bmove_process_input(bool allowc1x, bool allowc1y, bool allowc1buttons, bool
 							&& g_Vars.coopplayernum <= -1) {
 						movedata.eyesshut = g_Vars.currentplayer->insightaimmode
 							&& !canmanualzoom
-							&& joy_get_buttons(contpad1, c1allowedbuttons & (D_JPAD | D_CBUTTONS));
+							&& joyGetButtons(contpad1, c1allowedbuttons & (0 | D_CBUTTONS));
 					}
 
-					if (bgun_get_weapon_num(HAND_RIGHT) == WEAPON_FARSIGHT) {
-						movedata.farsighttempautoseek = g_Vars.currentplayer->insightaimmode && (c1buttons & (L_CBUTTONS | R_CBUTTONS | L_JPAD | R_JPAD));
+					if (bgunGetWeaponNum(HAND_RIGHT) == WEAPON_FARSIGHT) {
+						movedata.farsighttempautoseek = g_Vars.currentplayer->insightaimmode && (c1buttons & (L_CBUTTONS | R_CBUTTONS | 0 | 0));
 					} else {
-						movedata.rleanleft = g_Vars.currentplayer->insightaimmode && (c1buttons & (L_JPAD | L_CBUTTONS));
-						movedata.rleanright = g_Vars.currentplayer->insightaimmode && (c1buttons & (R_JPAD | R_CBUTTONS));
+						movedata.rleanleft = g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | L_CBUTTONS));
+						movedata.rleanright = g_Vars.currentplayer->insightaimmode && (c1buttons & (0 | R_CBUTTONS));
 					}
 
 					// Handle mine detonation
