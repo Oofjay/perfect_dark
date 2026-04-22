@@ -16366,6 +16366,11 @@ s32 prop_pickup_by_player(struct prop *prop, bool showhudmsg)
 					sp70 = true;
 				} else {
 					count = inv_give_weapons_by_prop(prop);
+					
+					if (g_MpSetup.scenario == MPSCENARIO_MWGG && weapon->weaponnum == WEAPON_DY357LX)
+					{
+						scenario_pick_up_gg(g_Vars.currentplayer->prop->chr, prop);
+					}
 
 					if (count) {
 						sp70 = true;

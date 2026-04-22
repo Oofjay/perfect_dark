@@ -319,6 +319,7 @@ u32 add87654321(u32 value)
 u32 bot_pickup_prop(struct prop *prop, struct chrdata *chr)
 {
 	struct defaultobj *obj = prop->obj;
+	int playernum;
 
 	if (!chr || !chr->aibot) {
 		return 0;
@@ -416,6 +417,11 @@ u32 bot_pickup_prop(struct prop *prop, struct chrdata *chr)
 			} else if (weapon->weaponnum == WEAPON_DATAUPLINK) {
 				result = scenario_pick_up_uplink(chr, prop);
 			} else {
+				if (g_MpSetup.scenario == MPSCENARIO_MWGG && weapon->weaponnum == WEAPON_DY357LX)
+				{
+					scenario_pick_up_gg(chr, prop);
+				}
+				
 				prop_play_pickup_sound(prop, weapon->weaponnum);
 				qty = weapon_get_pickup_ammo_qty(weapon);
 

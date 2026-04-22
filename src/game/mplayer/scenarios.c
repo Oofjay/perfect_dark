@@ -171,6 +171,7 @@ MenuItemHandlerResult menuhandler_mp_slow_motion(s32 operation, struct menuitem 
 #include "scenarios/kingofthehill.inc"
 #include "scenarios/hackthatmac.inc"
 #include "scenarios/popacap.inc"
+#include "scenarios/mwgg.inc"
 
 // Define the scenario callbacks
 struct mpscenario g_MpScenarios[] = {
@@ -247,6 +248,25 @@ struct mpscenario g_MpScenarios[] = {
 		ctc_get_max_teams,
 		ctc_is_room_highlighted,
 		ctc_highlight_room,
+	}, {
+		&g_MpCombatOptionsMenuDialog,
+		mwgg_init,
+		mwgg_num_props,
+		mwgg_init_props,
+		mwgg_tick,
+		NULL,
+		NULL,
+		NULL,
+		mwgg_radar_extra,
+		mwgg_radar_chr,
+		mwgg_highlight_prop,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL
 	},
 };
 
@@ -258,6 +278,7 @@ struct mpscenariooverview g_MpScenarioOverviews[] = {
 	{ L_MPMENU_249, L_MPMENU_256, MPFEATURE_SCENARIO_PAC, false }, // "Pop a Cap", "Pop"
 	{ L_MPMENU_250, L_MPMENU_257, MPFEATURE_SCENARIO_KOH, true  }, // "King of the Hill", "Hill"
 	{ L_MPMENU_251, L_MPMENU_258, MPFEATURE_SCENARIO_CTC, true  }, // "Capture the Case", "Capture"
+	{ L_MPMENU_000, L_MPMENU_001, 0,                      false }, // 
 };
 
 /**
@@ -1461,6 +1482,70 @@ s32 scenario_pick_up_uplink(struct chrdata *chr, struct prop *prop)
 	}
 
 	return TICKOP_NONE;
+}
+
+/**
+ * Handle a player or bot picking up a special weapon in MWGG.
+ *
+ * The return value is a TICKOP constant.
+ */
+void scenario_pick_up_gg(struct chrdata *chr, struct prop *prop)
+{
+	s32 i;
+	char message[64];
+	struct mpchrconfig *mpchr;
+	u32 playernum;
+
+	if (g_MpSetup.scenario == MPSCENARIO_MWGG) {
+#if VERSION >= VERSION_NTSC_1_0
+		struct defaultobj *obj = prop->obj;
+#endif
+		//g_ScenarioData.htm.uplink = chr->prop;
+
+		if (chr->aibot) {
+			mpchr = g_MpAllChrConfigPtrs[mp_chr_to_chrindex(chr)];
+		} else {
+			mpchr = MPCHR(g_Vars.playerstats[g_Vars.currentplayernum].mpindex);
+		}
+
+#if VERSION >= VERSION_JPN_FINAL
+		// "%shas the\nData Uplink%s"
+		sprintf(message, lang_get(L_MPWEAPONS_000), scenario_remove_line_breaks(mpchr->name, 0));
+#elif VERSION >= VERSION_PAL_BETA
+		// "%shas the\nData Uplink%s"
+		sprintf(message, lang_get(L_MPWEAPONS_000), mpchr->name);
+#else
+		// "%shas the\n%s"
+		sprintf(message, lang_get(L_MPWEAPONS_000), mpchr->name, bgun_get_short_name(WEAPON_DY357LX));
+#endif
+		playernum = g_Vars.currentplayernum;
+		
+		for (i = 0; i < PLAYERCOUNT(); i++) {
+			if (chr->aibot || i != playernum) {
+				set_current_player_num(i);
+
+#if VERSION >= VERSION_JPN_FINAL
+				hudmsg_create_with_flags(message, HUDMSGTYPE_MPSCENARIO, HUDMSGFLAG_ONLYIFALIVE | HUDMSGFLAG_NOWRAP);
+#else
+				hudmsg_create_with_flags(message, HUDMSGTYPE_MPSCENARIO, HUDMSGFLAG_ONLYIFALIVE);
+#endif
+			}
+		}
+
+		set_current_player_num(playernum);
+
+		if (chr->aibot) {
+			//prop_play_pickup_sound(prop, WEAPON_DATAUPLINK);
+			//botinv_give_single_weapon(chr, WEAPON_DATAUPLINK);
+			chr->aibot->hasbriefcase = true;
+
+#if VERSION >= VERSION_NTSC_1_0
+			//obj->hidden |= OBJHFLAG_DELETING;
+#else
+			//prop->obj->hidden |= OBJHFLAG_DELETING;
+#endif
+		}
+	}
 }
 
 /**

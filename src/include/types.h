@@ -4193,6 +4193,16 @@ struct scenariodata_ctc {
 	/*0x58*/ struct prop *tokens[4];
 };
 
+struct scenariodata_mwgg {
+	s16 playernum;
+	struct prop *token;
+	struct coord pos;
+	s32 tokenpad;
+	s16 nextindex;
+	s16 padnums[60];
+	u8 playerhastoken;
+};
+
 struct scenariodata {
 	union {
 		struct scenariodata_htb htb;
@@ -4200,6 +4210,7 @@ struct scenariodata {
 		struct scenariodata_pac pac;
 		struct scenariodata_koh koh;
 		struct scenariodata_ctc ctc;
+		struct scenariodata_mwgg mwgg;
 	};
 };
 

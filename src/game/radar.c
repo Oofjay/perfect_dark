@@ -252,7 +252,6 @@ Gfx *radar_render(Gfx *gdl)
 	struct coord pos;
 	u32 colour;
 	s32 i;
-	char text[48];
 
 	tconfig = &g_TexRadarConfigs[TEX_RADAR_BG];
 	playernum = g_Vars.currentplayernum;
@@ -389,9 +388,6 @@ Gfx *radar_render(Gfx *gdl)
 				}
 
 				gdl = radar_draw_dot(gdl, g_MpBotChrPtrs[i]->prop, &pos, colour, 0, 0);
-				
-				sprintf(text, "%d", (s32)g_Vars.currentplayer->prop->pos.y);
-				hudmsg_create(text, HUDMSGTYPE_DEFAULT);
 			}
 		}
 	}

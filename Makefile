@@ -22,7 +22,7 @@ ROMID ?= ntsc-final
 #
 # If enabled, all further options are ignored and are set automatically.
 
-MATCHING = 0
+MATCHING = 1
 
 # COMPILER - Choose which compiler to use.
 #

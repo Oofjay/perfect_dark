@@ -770,6 +770,10 @@ bool inv_has_data_uplink(void)
 
 bool inv_has_goldengun(void)
 {
+	if (g_Vars.currentplayer->isdead == false) {
+		return inv_has_single_weapon_exc_all_guns(WEAPON_DY357LX);
+	}
+	
 	return false;
 }
 
