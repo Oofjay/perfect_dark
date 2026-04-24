@@ -319,7 +319,6 @@ u32 add87654321(u32 value)
 u32 bot_pickup_prop(struct prop *prop, struct chrdata *chr)
 {
 	struct defaultobj *obj = prop->obj;
-	int playernum;
 
 	if (!chr || !chr->aibot) {
 		return 0;
@@ -386,6 +385,9 @@ u32 bot_pickup_prop(struct prop *prop, struct chrdata *chr)
 #endif
 			dprint();
 
+			if (g_MpSetup.scenario == MPSCENARIO_MWGG && chr->aibot->hasbriefcase) {
+				botact_give_ammo_by_type(chr->aibot, AMMOTYPE_MAGNUM, 2);
+			}
 			for (i = 0; i != 19; i++) {
 				qty = crate->slots[i].quantity;
 
@@ -503,7 +505,7 @@ bool bot_test_prop_for_pickup(struct prop *prop, struct chrdata *chr)
 	f32 sqrange;
 	bool sp3c;
 	u32 stack2;
-
+	
 	if (!chr || !chr->aibot || !g_Vars.lvmpbotlevel || chr_is_dead(chr)) {
 		return false;
 	}
@@ -597,6 +599,11 @@ bool bot_test_prop_for_pickup(struct prop *prop, struct chrdata *chr)
 		for (i = 0; i < 0x13; i++) {
 			weaponnum = botact_get_weapon_by_ammo_type(i + 1);
 
+			if (g_MpSetup.scenario == MPSCENARIO_MWGG && chr->aibot->hasbriefcase && i == AMMOTYPE_MAGNUM) {
+				if (botact_get_ammo_quantity_by_type(chr->aibot, AMMOTYPE_MAGNUM, false) < bgun_get_capacity_by_ammotype(AMMOTYPE_MAGNUM)) {
+					ignore1 = false;
+				}
+			}
 			if (crate2->slots[i].quantity > 0) {
 				if (botact_get_ammo_quantity_by_type(chr->aibot, i + 1, false) < bgun_get_capacity_by_ammotype(i + 1)) {
 					ignore1 = false;

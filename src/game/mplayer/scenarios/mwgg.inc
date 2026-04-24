@@ -20,6 +20,32 @@ s32 mwgg_num_props(void)
 	return 1;
 }
 
+void mwgg_add_pad(s16 padnum)
+{
+	struct scenariodata_mwgg *data = &g_ScenarioData.mwgg;
+
+#if VERSION >= VERSION_NTSC_1_0
+	if (data->nextindex < ARRAYCOUNT(data->padnums))
+#endif
+	{
+		osSyncPrintf("CaptureTheBriefcaseAddBankPad -> Adding New Pad %d  - Pad Id = %d-> Saving Pad\n", data->nextindex, padnum);
+
+		data->padnums[data->nextindex] = padnum;
+		data->nextindex++;
+	}
+}
+
+void mwgg_reset(void)
+{
+	s32 i;
+
+	g_ScenarioData.mwgg.nextindex = 0;
+
+	for (i = 0; i < ARRAYCOUNT(g_ScenarioData.mwgg.padnums); i++) {
+		g_ScenarioData.mwgg.padnums[i] = -1;
+	}
+}
+
 void mwgg_create_token(void)
 {
 	char text[60];

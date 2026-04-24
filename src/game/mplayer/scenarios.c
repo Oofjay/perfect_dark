@@ -864,6 +864,9 @@ void scenario_reset(void)
 		break;
 	case MPSCENARIO_POPACAP:
 		break;
+	case MPSCENARIO_MWGG:
+		mwgg_reset();
+		break;
 	}
 
 	if (cmd) {
@@ -880,6 +883,8 @@ void scenario_reset(void)
 					htm_add_pad(cmd[2]);
 				} else if (g_MpSetup.scenario == MPSCENARIO_HOLDTHEBRIEFCASE) {
 					htb_add_pad(cmd[2]);
+				} else if (g_MpSetup.scenario == MPSCENARIO_MWGG) {
+					mwgg_add_pad(cmd[2]);
 				}
 				cmd += 3;
 				break;

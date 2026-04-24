@@ -16286,16 +16286,18 @@ s32 prop_pickup_by_player(struct prop *prop, bool showhudmsg)
 			u32 stack;
 			s32 i;
 
+			if (g_MpSetup.scenario == MPSCENARIO_MWGG && g_Vars.currentplayer->prop == g_ScenarioData.mwgg.token) {
+				ammo_handle_pickup(AMMOTYPE_MAGNUM, 2, false, showhudmsg);
+			}
 			for (i = 0; i != 19; i++) {
 				s32 qty = crate->slots[i].quantity;
-
+				
 				if (!g_Vars.normmplayerisrunning) {
 					qty *= g_AmmoQuantityScale;
 				}
-
+					
 				ammo_handle_pickup(i + 1, qty, false, showhudmsg);
 			}
-
 			if (g_Vars.in_cutscene == false) {
 				snd_start(var80095200, SFXNUM_00EA_PICKUP_AMMO, NULL, -1, -1, -1, -1, -1);
 			}
@@ -16669,7 +16671,11 @@ s32 obj_test_for_pickup(struct prop *prop)
 			s32 ammotype = i + 1;
 
 			if (crate->slots[i].quantity > 0) {
-				if (bgun_get_reserved_ammo_count(ammotype) < bgun_get_capacity_by_ammotype(ammotype)) {
+				if (bgun_get_reserved_ammo_count(ammotype) < bgun_get_capacity_by_ammotype(ammotype) 
+					|| g_MpSetup.scenario == MPSCENARIO_MWGG 
+					&& g_Vars.currentplayer->prop == g_ScenarioData.mwgg.token 
+					&& bgun_get_reserved_ammo_count(AMMOTYPE_MAGNUM) < bgun_get_capacity_by_ammotype(AMMOTYPE_MAGNUM))
+				{
 					ignore = false;
 					break;
 				}
