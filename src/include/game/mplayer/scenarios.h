@@ -14,7 +14,7 @@ struct mpscenariooverview {
 	u8 teamonly;
 };
 
-extern struct mpscenariooverview g_MpScenarioOverviews[7];
+extern struct mpscenariooverview g_MpScenarioOverviews[8];
 
 MenuItemHandlerResult menuhandler_mp_open_options(s32 operation, struct menuitem *item, union handlerdata *data);
 void scenario_read_save(struct savebuffer *buffer);

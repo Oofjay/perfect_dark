@@ -1123,7 +1123,7 @@ void botinv_drop(struct chrdata *chr, s32 weaponnum, u8 dropall)
 {
 	s32 i;
 
-	if (!chr || !chr->aibot) {
+	if (!chr || !chr->aibot || g_MpSetup.scenario == MPSCENARIO_CASINOROYALE) {
 		return;
 	}
 

@@ -6,6 +6,131 @@
  * There are no callback functions or special logic.
  */
 
+struct menuitem g_MwggOptionsMenuItems[] = {
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_222, // "One-Hit Kills"
+		MPOPTION_ONEHITKILLS,
+		menuhandler_mp_one_hit_kills,
+	},
+	{
+		MENUITEMTYPE_DROPDOWN,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_223, // "Slow Motion"
+		0,
+		menuhandler_mp_slow_motion,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_224, // "Fast Movement"
+		MPOPTION_FASTMOVEMENT,
+		menuhandler_mp_checkbox_option,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_225, // "Display Team"
+		MPOPTION_DISPLAYTEAM,
+		menuhandler_mp_display_team,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_226, // "No Radar"
+		MPOPTION_NORADAR,
+		menuhandler_mp_checkbox_option,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_227, // "No Auto-Aim"
+		MPOPTION_NOAUTOAIM,
+		menuhandler_mp_checkbox_option,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_OPTIONS_493, // "Kills Score"
+		MPOPTION_KILLSSCORE,
+		menuhandler_mp_checkbox_option,
+	},
+	{
+		MENUITEMTYPE_SEPARATOR,
+		0,
+		0,
+		0,
+		0,
+		NULL,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_372, // "Highlight Weapon"
+		MPOPTION_MWGG_HIGHLIGHTWEAPON,
+		menuhandler_mp_checkbox_option,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_238, // "Show on Radar"
+		MPOPTION_MWGG_SHOWONRADAR,
+		menuhandler_mp_checkbox_option,
+	},
+	{
+		MENUITEMTYPE_CHECKBOX,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_490, // "Dual Wielding"
+		MPOPTION_MWGG_DUALWIELDING,
+		menuhandler_mp_checkbox_option,
+	},
+	/*{ //WEAPON OPTION
+		MENUITEMTYPE_SLIDER,
+		0,
+		MENUITEMFLAG_LOCKABLEMINOR,
+		L_MPMENU_491, // "Interval"
+		0x0000006e,
+		menuhandler_mp_cr_interval,
+	},*/
+	{
+		MENUITEMTYPE_SEPARATOR,
+		0,
+		0,
+		0,
+		0,
+		NULL,
+	},
+	{
+		MENUITEMTYPE_SELECTABLE,
+		0,
+		MENUITEMFLAG_SELECTABLE_CLOSESDIALOG,
+		L_MPMENU_239, // "Back"
+		0,
+		NULL,
+	},
+	{ MENUITEMTYPE_END },
+};
+
+struct menudialogdef g_MwggOptionsMenuDialog = {
+	MENUDIALOGTYPE_DEFAULT,
+	L_MPMENU_493, // "Holy Grail Options"
+	g_MwggOptionsMenuItems,
+	mp_options_menu_dialog,
+	MENUDIALOGFLAG_MPLOCKABLE,
+	NULL,
+};
+
 struct defaultobj *chosencandidate = NULL;
 
 struct weaponobj g_MwggTokenObj;
@@ -225,9 +350,55 @@ void mwgg_tick(void)
 	}
 }
 
+void mwgg_handle_death(s32 aplayernum, s32 vplayernum)
+{
+	struct chrdata *killer = g_MpAllChrPtrs[aplayernum];
+	struct prop *killerweapon = killer->weapons_held[0];
+	
+	if (killerweapon != NULL) {	
+		if (killerweapon->weapon->weaponnum == WEAPON_DY357LX) {
+			++g_ScenarioData.mwgg.killcounts[aplayernum];
+		}
+	}
+}
+
+void mwgg_calculate_player_score(struct mpchrconfig *mpchr, s32 mpchrnum, s32 *score, s32 *arg3)
+{
+	struct mpchrconfig *loopmpchr;
+	s32 i;
+	s32 index;
+	
+	*score = 0;
+	index = mp_chrslot_to_chrindex(mpchrnum);
+
+	if ((g_MpSetup.options & MPOPTION_KILLSSCORE) == 0 && index >= 0) {
+		*score += g_ScenarioData.mwgg.killcounts[index];
+	}
+
+	if (g_MpSetup.options & MPOPTION_KILLSSCORE) {
+		for (i = 0; i != MAX_MPCHRS; i++) {
+			if (i == mpchrnum) {
+				*score -= mpchr->killcounts[i];
+			} else if (g_MpSetup.options & MPOPTION_TEAMSENABLED) {
+				loopmpchr = MPCHR(i);
+
+				if (loopmpchr->team == mpchr->team) {
+					*score -= mpchr->killcounts[i];
+				} else {
+					*score += mpchr->killcounts[i];
+				}
+			} else {
+				*score += mpchr->killcounts[i];
+			}
+		}
+	}
+
+	*arg3 = mpchr->numdeaths;
+}
+
 Gfx *mwgg_radar_extra(Gfx *gdl)
 {
-	if (/*(g_MpSetup.options & MPOPTION_HTB_SHOWONRADAR) &&*/
+	if ((g_MpSetup.options & MPOPTION_MWGG_SHOWONRADAR) &&
 			g_ScenarioData.mwgg.token != NULL &&
 			g_ScenarioData.mwgg.token->type != PROPTYPE_PLAYER &&
 			g_ScenarioData.mwgg.token->type != PROPTYPE_CHR) {
@@ -243,7 +414,7 @@ Gfx *mwgg_radar_extra(Gfx *gdl)
 
 bool mwgg_radar_chr(Gfx **gdl, struct prop *prop)
 {
-	if (/*(g_MpSetup.options & MPOPTION_HTB_SHOWONRADAR) &&*/
+	if ((g_MpSetup.options & MPOPTION_MWGG_SHOWONRADAR) &&
 			g_ScenarioData.mwgg.token &&
 			prop == g_ScenarioData.mwgg.token) {
 		if (prop->type == PROPTYPE_PLAYER || prop->type == PROPTYPE_CHR) {
@@ -268,8 +439,7 @@ bool mwgg_radar_chr(Gfx **gdl, struct prop *prop)
 
 bool mwgg_highlight_prop(struct prop *prop, s32 *colour)
 {
-	//if ((g_MpSetup.options & MPOPTION_HTB_HIGHLIGHTBRIEFCASE) && prop == g_ScenarioData.htb.token) {
-	if (prop == g_ScenarioData.mwgg.token) {
+	if ((g_MpSetup.options & MPOPTION_MWGG_HIGHLIGHTWEAPON) && prop == g_ScenarioData.mwgg.token) {
 		colour[0] = 0;
 		colour[1] = 0xff;
 		colour[2] = 0;

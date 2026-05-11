@@ -172,6 +172,7 @@ MenuItemHandlerResult menuhandler_mp_slow_motion(s32 operation, struct menuitem 
 #include "scenarios/hackthatmac.inc"
 #include "scenarios/popacap.inc"
 #include "scenarios/mwgg.inc"
+#include "scenarios/casinoroyale.inc"
 
 // Define the scenario callbacks
 struct mpscenario g_MpScenarios[] = {
@@ -249,14 +250,14 @@ struct mpscenario g_MpScenarios[] = {
 		ctc_is_room_highlighted,
 		ctc_highlight_room,
 	}, {
-		&g_MpCombatOptionsMenuDialog,
+		&g_MwggOptionsMenuDialog,
 		mwgg_init,
 		mwgg_num_props,
 		mwgg_init_props,
 		mwgg_tick,
 		NULL,
 		NULL,
-		NULL,
+		mwgg_calculate_player_score,
 		mwgg_radar_extra,
 		mwgg_radar_chr,
 		mwgg_highlight_prop,
@@ -268,6 +269,26 @@ struct mpscenario g_MpScenarios[] = {
 		NULL,
 		NULL
 	},
+	{
+		&g_CrOptionsMenuDialog,
+		NULL,
+		NULL,
+		cr_init_props,
+		cr_tick,
+		NULL,
+		cr_render_hud,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		cr_read_save,
+		cr_write_save
+	},
 };
 
 struct mpscenariooverview g_MpScenarioOverviews[] = {
@@ -278,7 +299,8 @@ struct mpscenariooverview g_MpScenarioOverviews[] = {
 	{ L_MPMENU_249, L_MPMENU_256, MPFEATURE_SCENARIO_PAC, false }, // "Pop a Cap", "Pop"
 	{ L_MPMENU_250, L_MPMENU_257, MPFEATURE_SCENARIO_KOH, true  }, // "King of the Hill", "Hill"
 	{ L_MPMENU_251, L_MPMENU_258, MPFEATURE_SCENARIO_CTC, true  }, // "Capture the Case", "Capture"
-	{ L_MPMENU_000, L_MPMENU_001, 0,                      false }, // 
+	{ L_MPMENU_484, L_MPMENU_485, 0,                      false }, // "Man with the Golden Gun", "Golden Gun"
+	{ L_MPMENU_486, L_MPMENU_487, 0,                      false }, // "Casino Royale", "Casino"
 };
 
 /**
@@ -866,6 +888,9 @@ void scenario_reset(void)
 		break;
 	case MPSCENARIO_MWGG:
 		mwgg_reset();
+		break;
+	case MPSCENARIO_CASINOROYALE:
+		cr_reset();
 		break;
 	}
 

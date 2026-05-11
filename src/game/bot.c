@@ -267,6 +267,8 @@ void bot_spawn(struct chrdata *chr, u8 respawning)
 	struct aibot *aibot = chr->aibot;
 	struct coord pos;
 	RoomNum rooms[8];
+	
+	s32 weaponnum = g_ScenarioData.cr.weaponindex;
 
 	if (chr->prop) {
 		prop = chr->prop->child;
@@ -297,6 +299,16 @@ void bot_spawn(struct chrdata *chr, u8 respawning)
 		chr->aibot->moveratey = 0;
 
 		chr_stand_immediate(chr, 0);
+		
+		if (respawning && g_MpSetup.scenario == MPSCENARIO_CASINOROYALE)	{
+			botinv_give_single_weapon(chr, weaponnum);
+			if (g_MpSetup.options & MPOPTION_CR_DUALWIELDING && gset_has_weapon_flag(weaponnum, WEAPONFLAG_DUALWIELD)) { botinv_give_dual_weapon(chr, weaponnum); }
+			botinv_switch_to_weapon(chr, weaponnum, 0);
+			if (g_MpSetup.options & MPOPTION_CR_DUALWIELDING && gset_has_weapon_flag(weaponnum, WEAPONFLAG_DUALWIELD)) { botinv_switch_to_weapon(chr, weaponnum, 0); }
+		
+			botact_give_ammo_by_type(chr->aibot, bgun_get_ammo_type_for_weapon(weaponnum, 0), 99999);
+			botact_give_ammo_by_type(chr->aibot, bgun_get_ammo_type_for_weapon(weaponnum, 1), 99999);
+		}
 	}
 }
 

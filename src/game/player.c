@@ -590,7 +590,7 @@ void player_start_new_life(void)
 	}
 
 	inv_give_single_weapon(WEAPON_UNARMED);
-
+	
 	if (cmd) {
 		if (cmd);
 		if (cmd);
@@ -658,6 +658,24 @@ void player_start_new_life(void)
 
 	bmove_update_rooms(g_Vars.currentplayer);
 	player_spawn();
+	
+	if (g_MpSetup.scenario == MPSCENARIO_CASINOROYALE) {
+		s32 weaponnum = g_ScenarioData.cr.weaponindex;
+	
+		if (g_MpSetup.options & MPOPTION_CR_DUALWIELDING) {
+			inv_give_single_weapon(weaponnum);
+			inv_give_double_weapon(weaponnum, weaponnum);
+			bgun_equip_weapon2(HAND_RIGHT, weaponnum);
+			bgun_equip_weapon2(HAND_LEFT, weaponnum);
+		}
+		else {
+			inv_give_single_weapon(weaponnum);
+			bgun_equip_weapon(weaponnum);
+		}
+		
+		ammo_handle_pickup(bgun_get_ammo_type_for_weapon(weaponnum, 0), 99999, false, false);
+		ammo_handle_pickup(bgun_get_ammo_type_for_weapon(weaponnum, 1), 99999, false, false);
+	}
 
 	if (g_Vars.normmplayerisrunning) {
 		player_start_chr_fade(120, 1);
@@ -949,7 +967,7 @@ void player_spawn(void)
 	struct coord sp90;
 	struct coord sp84;
 	struct coord sp78;
-
+					
 	g_Vars.currentplayer->deathanimfinished = false;
 	g_Vars.currentplayer->redbloodfinished = false;
 	g_Vars.currentplayer->startnewbonddie = true;
@@ -1097,7 +1115,7 @@ void player_spawn(void)
 		} else {
 			bgun_equip_weapon2(HAND_LEFT, g_DefaultWeapons[HAND_LEFT]);
 			bgun_equip_weapon2(HAND_RIGHT, g_DefaultWeapons[HAND_RIGHT]);
-
+			
 #if VERSION >= VERSION_NTSC_1_0
 			if (g_Vars.currentplayer->model00d4 == NULL
 					&& (IS8MB() || g_Vars.fourmeg2player || g_MpAllChrPtrs[g_Vars.currentplayernum] == NULL)) {
@@ -4828,7 +4846,7 @@ void player_die_by_shooter(u32 shooter, bool force)
 		if (g_Vars.mplayerisrunning &&
 				(g_Vars.antiplayernum < 0
 				 || g_Vars.currentplayernum != g_Vars.antiplayernum
-				 || shooter != g_Vars.antiplayernum)) {
+				 || shooter != g_Vars.antiplayernum) && g_MpSetup.scenario != MPSCENARIO_CASINOROYALE) {
 			current_player_drop_all_items();
 		}
 

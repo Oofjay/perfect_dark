@@ -254,6 +254,7 @@ struct g_vars {
 	/*0x508*/ u32 unk000508;
 	/*0x50c*/ u32 unk00050c;
 	/*0x510*/ f32 unk000510;
+			  s32 crinterval; // The time it takes for weapons to switch in Casino Royale
 };
 
 struct weaponobj;
@@ -4201,6 +4202,16 @@ struct scenariodata_mwgg {
 	s16 nextindex;
 	s16 padnums[60];
 	u8 playerhastoken;
+	s16 killcounts[MAX_MPCHRS]; // Special weapon kills
+};
+
+struct scenariodata_cr {
+	u8 weaponindex;
+	u8 mpweaponindex;
+	bool allocatedammo;
+	s16 elapsed240;
+	u8 maxoptions;
+	u8 weaponoptions[NUM_MPWEAPONSLOTS];
 };
 
 struct scenariodata {
@@ -4211,6 +4222,7 @@ struct scenariodata {
 		struct scenariodata_koh koh;
 		struct scenariodata_ctc ctc;
 		struct scenariodata_mwgg mwgg;
+		struct scenariodata_cr cr;
 	};
 };
 

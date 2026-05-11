@@ -6083,12 +6083,12 @@ void bgun_handle_player_dead(void)
 
 	if (player->gunctrl.weaponnum != WEAPON_NONE && player->gunctrl.switchtoweaponnum != WEAPON_NONE) {
 		// Eject held weapons
-		if (player->hands[HAND_LEFT].inuse) {
+		if (player->hands[HAND_LEFT].inuse && g_MpSetup.scenario != MPSCENARIO_CASINOROYALE) {
 			player->hands[HAND_LEFT].ejectstate = EJECTSTATE_INIT;
 			player->hands[HAND_LEFT].ejecttype = EJECTTYPE_GUN;
 		}
 
-		if (player->hands[HAND_RIGHT].inuse) {
+		if (player->hands[HAND_RIGHT].inuse && g_MpSetup.scenario != MPSCENARIO_CASINOROYALE) {
 			player->hands[HAND_RIGHT].ejectstate = EJECTSTATE_INIT;
 			player->hands[HAND_RIGHT].ejecttype = EJECTTYPE_GUN;
 		}
